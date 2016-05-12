@@ -1,0 +1,8 @@
+Config { font = "xft:Liberation Mono:size=10:bold:antialias=true"
+       , position = TopW L 100
+       , commands = [ Run Date "<fc=#696969>(%a %d %b %Y) <fc=#70D8FA>%H:%M:%S</fc></fc> " "date" 10
+                  , Run StdinReader]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %date%"
+}
