@@ -9,7 +9,7 @@
 # terminal in use, along with the appropriate switch       #
 # to open the terminal running a particular                #
 # application, and b) the incantation for dmenu to         #
-# allow a prticular tmux instance to be used. I use        #
+# allow a particular tmux instance to be used. I use       #
 # dmenu2 which allows more configuration of appearances;   #
 # if this doesn't work, try setting SELECTOR to just       #
 # dmenu and then customize.                                #
