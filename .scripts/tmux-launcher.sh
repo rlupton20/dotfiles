@@ -15,12 +15,13 @@
 # dmenu and then customize.                                #
 ############################################################
 XTERM="urxvt -e"
-SELECTOR='dmenu -h 30 -y 350 -nb #24251f -nf #66d9ef -sb #272822 -sf #f92672 -fn LiberationMono-10:bold'
+SELECTOR="dmenu -h 30 -y 350 -nb #24251f -nf #66d9ef \
+          -sb #272822 -sf #f92672 -fn LiberationMono-10:bold"
 
 # Make a choice of an existing session, or naming a new session
 CHOICE=$(tmux ls | awk '{ print $1 }' | sed 's\:.*\\' | $SELECTOR)
 
-# If not choice is made exit cleanly
+# If no choice is made, exit now
 if [ "$CHOICE" = "" ]; then
     exit
 fi
