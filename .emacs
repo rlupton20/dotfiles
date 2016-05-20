@@ -25,7 +25,6 @@
 ;; THEME :: Load the monokai theme
 (load-theme 'monokai t)
 
-
 ;;; Odd tweaks for general behaviour
 
 ;; BUFFER BEHAVIOUR :: handy function from wikipedia, that
@@ -80,3 +79,8 @@
 ;; Do some Haskell specific configuration.
 
 ;; HASKELL :: haskell-mode
+
+;; Make is possible to launch ghci instances from emacs
+(require 'haskell-interactive-mode)
+(require 'haskell-process)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
