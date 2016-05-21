@@ -42,4 +42,4 @@ main = do
     insertkeys _ = [ ((defaultMask, xK_p), spawn "$(yeganesh -x -- -h 30 -y 400 -nb '#303030' -nf '#505050' -sb '#0099FF' -sf '#303030' -fn 'LiberationMono-10:bold')")
                    , ((controlMask, xK_i), spawn "xcalib -i -a")
                    , ((defaultMask, xK_e), makeEmacsPanel)
-                   , ((defaultMask, xK_t), spawn "tmux-launcher.sh") ]
+                   , ((defaultMask, xK_t), spawn "tmux-launcher") ]
