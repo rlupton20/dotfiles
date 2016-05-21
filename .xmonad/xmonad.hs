@@ -35,7 +35,7 @@ main = do
     makeEmacsPanel :: X ()
     makeEmacsPanel = do
       setLayout (Layout $ avoidStruts $ noBorders (Full :: Full Window))
-      spawn "emacsc"
+      spawn "emacs-client"
       
 
     insertkeys :: XConfig l -> [((KeyMask,KeySym), X ())]
