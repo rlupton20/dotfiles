@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# A wrapper for emacsclient with appropriate client switch, so
+# that it's picked up by dmenu etc.
+
+emacsclient -c
