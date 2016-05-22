@@ -9,8 +9,7 @@
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives
-	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
+	     '("melpa" . "https://melpa.org/packages/") t)
 
 
 ;;; Now we make some adjustments to the basic appearance of
@@ -22,8 +21,23 @@
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
 
+
 ;; THEME :: Load the monokai theme
 (load-theme 'monokai t)
+
+
+;; HELM :: Use helm in places where it is useful
+
+;; First using helm for M-x so we get a live filter
+;; of options, and don't need to keep tab completing.
+(global-set-key (kbd "M-x") 'helm-M-x)
+;; Also use helm for buffers. I can never remember the
+;; buffers I have open.
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+;; Finding files can also be a pain, so use helm
+;; to locate and open files
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
 
 ;;; Odd tweaks for general behaviour
 
@@ -44,6 +58,24 @@
 (global-set-key "\C-x2" 'split-vertical-to-next-buffer)
 (global-set-key "\C-x3" 'split-horizontal-to-next-buffer)
 
+;; Now some function I wrote to switch buffers around
+;; between different windows.
+(defun switch-buffer-next ()
+  (interactive)
+  (let ((current (window-buffer)))
+  (set-window-buffer nil
+		     (window-buffer (next-window)))
+  (set-window-buffer (next-window) current)))
+
+(defun switch-buffer-previous ()
+  (interactive)
+  (let ((current (window-buffer)))
+  (set-window-buffer nil
+		     (window-buffer (previous-window)))
+  (set-window-buffer (previous-window) current)))
+
+(global-set-key (kbd "C-x >") 'switch-buffer-next)
+(global-set-key (kbd "C-x <") 'switch-buffer-previous)
 
 
 ;;; There are some packages which are useful across a range of
@@ -78,9 +110,23 @@
 
 ;; Do some Haskell specific configuration.
 
+
 ;; HASKELL :: haskell-mode
 
 ;; Make is possible to launch ghci instances from emacs
 (require 'haskell-interactive-mode)
 (require 'haskell-process)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
+
+;;; EVIL AND POWERLINE :: Start evil mode and powerline
+
+;; Use powerline
+(require 'powerline)
+(require 'powerline-evil)
+(powerline-evil-vim-color-theme)
+
+;; Allow evil mode to be used if preferred
+(require 'evil)
+(evil-mode t)
+

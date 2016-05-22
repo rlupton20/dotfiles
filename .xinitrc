@@ -1,4 +1,4 @@
 xrdb -merge ~/.Xresources
-feh --bg-scale ~/Wallpapers/BishopStorm.jpg
+feh --bg-scale ~/Wallpapers/Parrot.jpg
 
 exec xmonad
