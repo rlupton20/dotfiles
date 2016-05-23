@@ -130,3 +130,26 @@
 (require 'evil)
 (evil-mode t)
 
+;;; EXPERIMENTAL
+
+;; An ssh connection manager (integrated with helm)
+(setq ssh-sessions '())
+
+(defun ssh-term (host)
+  (setq ssh-buffer-name (concat "*" host "*")) 
+  (set-buffer (apply 'term-ansi-make-term ssh-buffer-name "ssh" nil (list host)))
+  (term-mode)
+  (term-char-mode)
+  (add-to-list 'ssh-sessions ssh-buffer-name)
+  (switch-to-buffer ssh-buffer-name))
+
+(defun helm-switch-to-ssh-session ()
+  (interactive)
+  (setq helm-outline-current
+	'((name . "Current SSH sessions")
+	  (candidates . ssh-sessions)
+	  (action . (lambda (choice)
+		      (switch-to-buffer choice)))))
+  (helm :sources '(helm-outline-current)))
+
+(global-set-key (kbd "s-s") 'helm-switch-to-ssh-session)
