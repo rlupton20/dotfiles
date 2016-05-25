@@ -162,8 +162,7 @@
   (setq helm-outline-hosts
 	'((name . "Hosts")
 	  (candidates . host-list)
-	  (action . (lambda (host)
-		      (ssh-term host)))))
+	  (action . ssh-term)))
   (helm :sources '(helm-outline-hosts)))
 
 ;; helm-switch-to-ssh-session uses a helm menu to select a live ssh
@@ -176,8 +175,7 @@
   (setq helm-outline-current
 	'((name . "Current SSH sessions")
 	  (candidates . ssh-sessions)
-	  (action . (lambda (choice)
-		      (switch-to-buffer choice)))))
+	  (action . choice)))
   (helm :sources '(helm-outline-current)))
 
 ;; Some keybindings to test with
