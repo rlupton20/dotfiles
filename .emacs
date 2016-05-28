@@ -12,6 +12,14 @@
 	     '("melpa" . "https://melpa.org/packages/") t)
 
 
+;;; USEPACKAGE :: Check usepackage is installed, and install it
+;;; otherwise. Usepackage is then used to check other package
+;;; files are installed, and to configure them.
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+
 ;;; Now we make some adjustments to the basic appearance of
 ;;; emacs. For example, we load themes, and remove unwanted
 ;;; toolbars.
@@ -23,23 +31,28 @@
 
 ;; RELATIVE-LINE-NUMBERS :: Enable relative line numbers
 ;; everywhere.
-(global-relative-line-numbers-mode)
+(use-package relative-line-numbers
+  :ensure t
+  :config (global-relative-line-numbers-mode))
 
 ;; THEME :: Load the monokai theme
-(load-theme 'monokai t)
+(use-package monokai-theme
+  :ensure t
+  :config (load-theme 'monokai t))
 
 
 ;; HELM :: Use helm in places where it is useful
-
-;; First using helm for M-x so we get a live filter
-;; of options, and don't need to keep tab completing.
-(global-set-key (kbd "M-x") 'helm-M-x)
-;; Also use helm for buffers. I can never remember the
-;; buffers I have open.
-(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-;; Finding files can also be a pain, so use helm
-;; to locate and open files
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(use-package helm
+  :ensure t
+  :bind ( ;; First using helm for M-x so we get a live filter
+          ;; of options, and don't need to keep tab completing.
+          ("M-x" . helm-M-x)
+          ;; Also use helm for buffers. I can never remember the
+          ;; buffers I have open.
+          ("C-x C-b" . helm-buffers-list)
+          ;; Finding files can also be a pain, so use helm
+          ;; to locate and open files
+          ("C-x C-f" . helm-find-files)))
 
 
 ;;; Odd tweaks for general behaviour
@@ -85,30 +98,36 @@
 ;;; modes. We configure them here.
 
 ;; AVY :: Create some keybindings for avy
-(global-set-key (kbd "C-.") 'avy-goto-word-1)
+(use-package avy
+  :ensure t
+  :bind (("C-." . avy-goto-word-1)))
 
 ;; FUZZY :: Fuzzy lets us use fuzzy matching, which is useful
 ;; with packages like auto-complete.
-(require 'fuzzy)
+(use-package fuzzy
+  :ensure t)
 
 ;; AUTO-COMPLETE
-(require 'auto-complete-config)
-(ac-config-default)
-(setq ac-use-fuzzy t)
-(setq ac-auto-start nil)
-(define-key ac-mode-map (kbd "M-n") 'auto-complete)
+(use-package auto-complete
+  :ensure t
+  :bind (("M-n" . auto-complete))
+  :config (require 'auto-complete-config)
+          (ac-config-default)
+          (setq ac-use-fuzzy t)
+          (setq ac-auto-start nil))
 
 ;; YASNIPPET :: Use Yasnippet everywhere
-(require 'yasnippet)
-(yas-global-mode 1)
-
+(use-package yasnippet
+  :ensure t
+  :config (yas-global-mode 1))
 
 
 ;;; Now we configure packages for individual editing modes.
 
 ;; YAML :: Add YAML mode and configure
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yaml$" . yaml-mode))
 
 
 ;; Do some Haskell specific configuration.
@@ -117,21 +136,35 @@
 ;; HASKELL :: haskell-mode
 
 ;; Make is possible to launch ghci instances from emacs
-(require 'haskell-interactive-mode)
-(require 'haskell-process)
-(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+(use-package haskell-mode
+  :config (require 'haskell-interactive-mode)
+          (require 'haskell-process)
+          (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 
 
 ;;; EVIL AND POWERLINE :: Start evil mode and powerline
 
 ;; Use powerline
-(require 'powerline)
-(require 'powerline-evil)
-(powerline-evil-vim-color-theme)
+(use-package powerline
+  :ensure t
+  :config
+  (use-package powerline-evil
+    :ensure t
+    :config (powerline-evil-vim-color-theme)))
 
 ;; Allow evil mode to be used if preferred
-(require 'evil)
-(evil-mode t)
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode t)
+  ;;; SETUP :: odd bits and bobs
+  ;;; Disable the arrow keys!
+  (define-key evil-motion-state-map [left] 'switch-buffer-next)
+  (define-key evil-motion-state-map [right] 'undefined)
+  (define-key evil-motion-state-map [up] 'undefined)
+  (define-key evil-motion-state-map [down] 'undefined))
+
 
 ;;; EXPERIMENTAL SSH MANAGER
 (load-file "~/Projects/Emacs/sshman.el")
+
