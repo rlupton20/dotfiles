@@ -144,6 +144,11 @@
           (require 'haskell-process)
           (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 
+;; PYTHON :: elpy for editing Python
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
 
 ;;; EVIL AND POWERLINE :: Start evil mode and powerline
 
