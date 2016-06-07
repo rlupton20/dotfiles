@@ -29,6 +29,9 @@
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
 
+;; EMACS SPECIFIC :: more specific emacs customization
+(put 'narrow-to-region 'disabled nil)
+
 ;; RELATIVE-LINE-NUMBERS :: Enable relative line numbers
 ;; everywhere.
 (use-package relative-line-numbers
