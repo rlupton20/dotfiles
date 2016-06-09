@@ -16,6 +16,10 @@ export PATH=$HOME/.cabal/bin:$PATH
 # Add a custom scripts folder to the path
 export PATH=$HOME/.scripts/:$PATH
 
+# Also find locally installed packages and add them to the PATH
+# (pip for instance will install packages here)
+export PATH=$HOME/.local/bin:$PATH
+
 # Set terminal colours to 256
 # export TERM=xterm-256color
 
