@@ -124,6 +124,10 @@
   :ensure t
   :config (yas-global-mode 1))
 
+;; MAGIT :: Magit is a wrapper for git
+(use-package magit
+  :ensure t
+  :bind (("s-g" . magit-status)))
 
 ;;; Now we configure packages for individual editing modes.
 
