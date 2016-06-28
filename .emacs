@@ -129,6 +129,11 @@
   :ensure t
   :bind (("s-g" . magit-status)))
 
+;; PROJECTILE :: Projectile helps with project management
+(use-package projectile
+  :ensure t
+  :config (projectile-global-mode))
+
 ;;; Now we configure packages for individual editing modes.
 
 ;; YAML :: Add YAML mode and configure
@@ -153,6 +158,11 @@
   :ensure t
   :config
   (elpy-enable))
+
+
+;;; R :: editing modes and configuration for R
+(use-package ess
+  :ensure t)
 
 ;;; EVIL AND POWERLINE :: Start evil mode and powerline
 
