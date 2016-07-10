@@ -132,7 +132,15 @@
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
   :ensure t
-  :config (projectile-global-mode))
+  :config (projectile-global-mode)
+          (use-package helm-projectile
+            :ensure t)
+          (helm-projectile-on))
+
+;; FLYCHECK :: On the fly syntax checking
+(use-package flycheck
+  :ensure t
+  :config (global-flycheck-mode))
 
 ;;; Now we configure packages for individual editing modes.
 
@@ -144,7 +152,6 @@
 
 ;; Do some Haskell specific configuration.
 
-
 ;; HASKELL :: haskell-mode
 
 ;; Make is possible to launch ghci instances from emacs
@@ -153,16 +160,25 @@
           (require 'haskell-process)
           (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 
+
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
   :config
   (elpy-enable))
 
-
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
+
+;;; JavaScript :: editing mode and extensions for JavaScript
+(use-package js3-mode
+  :ensure t)
+
+;;; TypeScript :: editing mode for TypeScript
+(use-package tide
+  :ensure t)
+
 
 ;;; EVIL AND POWERLINE :: Start evil mode and powerline
 
@@ -178,14 +194,10 @@
 (use-package evil
   :ensure t
   :config
-  (evil-mode t)
-  ;;; SETUP :: odd bits and bobs
-  ;;; Disable the arrow keys!
-  (define-key evil-motion-state-map [left] 'switch-buffer-next)
-  (define-key evil-motion-state-map [right] 'undefined)
-  (define-key evil-motion-state-map [up] 'undefined)
-  (define-key evil-motion-state-map [down] 'undefined))
+  (evil-mode t))
 
+;;; SETUP :: odd bits and bobs
+;;; Disable the arrow keys!
 
 ;;; EXPERIMENTAL SSH MANAGER
 (load-file "~/Projects/Emacs/sshman.el")
