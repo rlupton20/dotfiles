@@ -28,6 +28,7 @@
 (tool-bar-mode -1)    ; Turn off tool bar in X mode
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
+(set-frame-font "LiberationMono" nil t)
 
 ;; EMACS SPECIFIC :: more specific emacs customization
 (put 'narrow-to-region 'disabled nil)
@@ -142,6 +143,9 @@
   :ensure t
   :config (global-flycheck-mode))
 
+(use-package multiple-cursors
+  :ensure t)
+
 ;;; Now we configure packages for individual editing modes.
 
 ;; YAML :: Add YAML mode and configure
@@ -154,13 +158,40 @@
 
 ;; HASKELL :: haskell-mode
 
-;; Make is possible to launch ghci instances from emacs
+;; Haskell modes use various packages installed by cabal,
+;; so we need to add cabal's bin directory to our path
+(defun add-cabal-path ()
+  (let ((cabal-path (expand-file-name "~/.cabal/bin")))
+    (setenv "PATH" (concat cabal-path path-separator (getenv "PATH")))
+    (add-to-list 'exec-path cabal-path)))
+
+
+;; Make it possible to launch ghci instances from emacs
 (use-package haskell-mode
-  :config (require 'haskell-interactive-mode)
+  :ensure t
+  :config (add-cabal-path)
+          (require 'haskell-interactive-mode)
           (require 'haskell-process)
-          (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
-
-
+          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	  ;; Add hindent and make it load automaticall with haskell-mode
+	  (use-package hindent
+	    :ensure t
+	    :config (add-hook 'haskell-mode-hook #'hindent-mode))
+	  ;; Add package ghc to work with ghc-mod
+;;	  (use-package ghc
+;;	    :ensure t
+;;	    :config (autoload 'ghc-init "ghc" nil t)
+;;	            (autoload 'ghc-debug "ghc" nil t)
+;;		    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+	  ;; Add jump to imports shortcut
+	  (eval-after-load 'haskell-mode
+	    '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
+	  (custom-set-variables '(haskell-tags-on-save t)  ; hasktags
+				'(haskell-process-suggest-remove-import-lines t)
+				'(haskell-process-auto-import-loaded-modules t)
+				'(haskell-process-log t)
+				'(haskell-process-type 'stack-ghci)))
+	  
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
