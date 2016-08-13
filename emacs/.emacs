@@ -148,6 +148,18 @@
 
 ;;; Now we configure packages for individual editing modes.
 
+
+;; NIX :: Specific stuff for working in nix
+(use-package nixos-options
+  :ensure t)
+
+(use-package nix-sandbox
+  :ensure t)
+
+;; NIX MODE :: for editing nix files and nix expressions
+(use-package nix-mode
+  :ensure t)
+
 ;; YAML :: Add YAML mode and configure
 (use-package yaml-mode
   :ensure t
@@ -178,14 +190,23 @@
 	    :ensure t
 	    :config (add-hook 'haskell-mode-hook #'hindent-mode))
 	  ;; Add package ghc to work with ghc-mod
-;;	  (use-package ghc
-;;	    :ensure t
-;;	    :config (autoload 'ghc-init "ghc" nil t)
-;;	            (autoload 'ghc-debug "ghc" nil t)
-;;		    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+	  ;; (use-package ghc
+	  ;;  :ensure t
+	  ;;  :config (autoload 'ghc-init "ghc" nil t)
+	   ;;         (autoload 'ghc-debug "ghc" nil t)
+	;;    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+	  (use-package shm
+	    :ensure t)
+	  (use-package flycheck-haskell
+	    :ensure t
+	    :config (eval-after-load 'flycheck
+		      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 	  ;; Add jump to imports shortcut
 	  (eval-after-load 'haskell-mode
 	    '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
+	  ;; Now we set up haskell-mode in the way which we like
+	  ;; Use structured haskell mode to handle indentation etc.
+	  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 	  (custom-set-variables '(haskell-tags-on-save t)  ; hasktags
 				'(haskell-process-suggest-remove-import-lines t)
 				'(haskell-process-auto-import-loaded-modules t)
@@ -230,6 +251,4 @@
 ;;; SETUP :: odd bits and bobs
 ;;; Disable the arrow keys!
 
-;;; EXPERIMENTAL SSH MANAGER
-(load-file "~/Projects/Emacs/sshman.el")
 

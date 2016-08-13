@@ -28,13 +28,11 @@ export EDITOR="emacsclient -c -nw"
 # An ls alias so we have colour
 alias ls='ls --color'
 
+# Alias top to htop
+alias top='htop'
+
 # Add stack auto-completion
 eval "$(stack --bash-completion-script stack)"
-
-# Add support for Python virtual environments,
-# and the wrapper which makes it nice to work with
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
 
 # Define a custom function for making a folder and
 # then cd-ing straight in to it
@@ -66,4 +64,8 @@ sd() {
 gitb() {
     br=$(git branch -l | percol | tr -d ' ')
     git checkout $br
+}
+
+nix-user-rebuild() {
+    nix-env -f ~/packages.nix -ir
 }
