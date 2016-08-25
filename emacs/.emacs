@@ -141,7 +141,11 @@
 ;; FLYCHECK :: On the fly syntax checking
 (use-package flycheck
   :ensure t
-  :config (global-flycheck-mode))
+  :config (setq flycheck-command-wrapper-function
+		  (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+		flycheck-executable-find
+		  (lambda (command) (nix-executable-find (nix-current-sandbox) command)))
+          (global-flycheck-mode))
 
 (use-package multiple-cursors
   :ensure t)
@@ -184,6 +188,9 @@
   :config (add-cabal-path)
           (require 'haskell-interactive-mode)
           (require 'haskell-process)
+	  ;; First lets make haskell-mode able to use the nix environment
+	  (setq haskell-process-wrapper-function
+		(lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
           (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 	  ;; Add hindent and make it load automaticall with haskell-mode
 	  (use-package hindent
