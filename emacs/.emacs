@@ -255,7 +255,10 @@
   :config
   (evil-mode t))
 
-;;; SETUP :: odd bits and bobs
-;;; Disable the arrow keys!
 
+;;; OTHER NICE THINGS :: Other things that are nice to have
+
+;; Structure and Interpretation of Computer Programs
+(use-package sicp
+  :ensure t)
 
