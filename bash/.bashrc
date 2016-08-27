@@ -47,25 +47,8 @@ edit() {
     $EDITOR $1
 }
 
-
-# sel uses a selection from output on $1 to run $2
-sel() {
-    $2 "$($1 | percol)"
-}
-
-# sd is like cd but with an interactive
-# directory selection
-sd() {
-    sel "ls -d */" cd
-}
-
-# gitb switches to a git branch, which is selected
-# using percol
-gitb() {
-    br=$(git branch -l | percol | tr -d ' ')
-    git checkout $br
-}
-
+# Define a utility function to rebuild the user
+# nix environment
 nix-user-rebuild() {
-    nix-env -f ~/packages.nix -ir
+    nix-env -f ~/.nix-user/packages.nix -ir
 }
