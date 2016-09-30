@@ -1,0 +1,21 @@
+! Set caps lock to left control (shift + caps lock gives Caps_Lock)
+keycode 66 = Control_L Caps_Lock
+
+! Also set left control to Hyper
+keycode 37 =  Hyper_L
+
+! Sort out the mess
+clear lock
+clear control
+add control = Control_L Control_R
+
+! Make Hyper a new modifier
+clear mod3
+clear mod4
+add mod3 = Hyper_L
+add mod4 = Super_L Super_R
+
+! Clear mod2 and use it for Alt_R
+clear mod2
+remove mod1 = Alt_R
+add mod2 = Alt_R
