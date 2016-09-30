@@ -9,6 +9,8 @@
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives
+	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 
 
@@ -28,22 +30,26 @@
 (tool-bar-mode -1)    ; Turn off tool bar in X mode
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
-(set-frame-font "LiberationMono" nil t)
+(visual-line-mode 1)
 
 ;; EMACS SPECIFIC :: more specific emacs customization
 (put 'narrow-to-region 'disabled nil)
 
 ;; RELATIVE-LINE-NUMBERS :: Enable relative line numbers
 ;; everywhere.
-(use-package relative-line-numbers
+;;(use-package relative-line-numbers
+;;  :ensure t
+;;  :config (global-relative-line-numbers-mode))
+(use-package linum-relative
   :ensure t
-  :config (global-relative-line-numbers-mode))
+  :config (linum-relative-global-mode))
 
 ;; THEME :: Load the monokai theme
-(use-package monokai-theme
-  :ensure t
-  :config (load-theme 'monokai t))
-
+;;(use-package monokai-theme
+;;  :ensure t
+;;  :config (load-theme 'monokai t))
+(use-package molokai-theme
+  :ensure t)
 
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
@@ -94,8 +100,8 @@
 		     (window-buffer (previous-window)))
   (set-window-buffer (previous-window) current)))
 
-(global-set-key (kbd "C-x >") 'switch-buffer-next)
-(global-set-key (kbd "C-x <") 'switch-buffer-previous)
+(global-set-key (kbd "s->") 'switch-buffer-next)
+(global-set-key (kbd "s-<") 'switch-buffer-previous)
 
 
 ;;; There are some packages which are useful across a range of
@@ -104,7 +110,7 @@
 ;; AVY :: Create some keybindings for avy
 (use-package avy
   :ensure t
-  :bind (("C-." . avy-goto-word-1)))
+  :bind (("H-f" . avy-goto-word-1)))
 
 ;; FUZZY :: Fuzzy lets us use fuzzy matching, which is useful
 ;; with packages like auto-complete.
@@ -114,7 +120,7 @@
 ;; AUTO-COMPLETE
 (use-package auto-complete
   :ensure t
-  :bind (("M-n" . auto-complete))
+  :bind (("H-p" . auto-complete))
   :config (require 'auto-complete-config)
           (ac-config-default)
           (setq ac-use-fuzzy t)
@@ -128,7 +134,7 @@
 ;; MAGIT :: Magit is a wrapper for git
 (use-package magit
   :ensure t
-  :bind (("s-g" . magit-status)))
+  :bind (("H-g" . magit-status)))
 
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
@@ -239,21 +245,39 @@
   :ensure t)
 
 
-;;; EVIL AND POWERLINE :: Start evil mode and powerline
-
-;; Use powerline
-(use-package powerline
+;;; SPACELINE :: use spaceline for emacs powerline
+(use-package spaceline
   :ensure t
   :config
-  (use-package powerline-evil
-    :ensure t
-    :config (powerline-evil-vim-color-theme)))
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  (setq powerline-height 20)
+  (setq powerline-default-separator 'arrow))
+
+
+;;; EVIL :: set up evil so emacs can be used to edit text as in vim
+
+;; First evil-leader gives a nice fast leader key
+(use-package evil-leader
+  :ensure t
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader ",")
+  (evil-leader/set-key
+   "x" 'helm-M-x
+   "f" 'helm-find-files
+   "g" 'magit-status))
 
 ;; Allow evil mode to be used if preferred
 (use-package evil
   :ensure t
   :config
   (evil-mode t))
+
+;; Fix keymaps
+(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+(define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
