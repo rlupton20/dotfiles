@@ -1,6 +1,6 @@
 # Custom user packages
 
-with (import <nixpkgs> {}); with (import <nixpkgs> {}).haskellPackages; with (import ./vim.nix {} );
+with (import <nixpkgs> {}); with (import <nixpkgs> {}).haskellPackages; with (import <nixpkgs> {}).xorg; with (import ./vim.nix {} );
 let
   gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
 in
@@ -12,6 +12,8 @@ in
     htop
     yeganesh
     custom-vim
+
+    weechat
     
     gnupg21
     gnupg1compat
@@ -20,4 +22,8 @@ in
     
     stack
 
+    virtinst
+    virt-viewer
+
+    xmodmap
     gtypist; }

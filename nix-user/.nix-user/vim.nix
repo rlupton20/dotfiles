@@ -6,6 +6,8 @@ with pkgs; rec {
     vimrcConfig.customRC = ''
       syntax on
       colorscheme molokai
+
+      set relativenumber
     '';
     vimrcConfig.vam.knownPlugins = pkgs.vimPlugins;
     vimrcConfig.vam.pluginDictionaries = [
