@@ -39,6 +39,10 @@
 ;; shell anyway, we may as well just use sh
 (setq shell-file-name "sh")
 
+;; EMACS SPECIFIC :: more specific emacs customization
+(put 'narrow-to-region 'disabled nil)
+
+
 ;; LINUM RELATIVE MODE :: use relative line numbering
 (use-package linum-relative
   :ensure t
@@ -55,6 +59,7 @@
 
 ;;(use-package molokai-theme
  ;; :ensure t)
+
 
 
 ;; HELM :: Use helm in places where it is useful
@@ -249,6 +254,8 @@
   :ensure t)
 
 
+;;; EVIL AND POWERLINE :: Start evil mode and powerline
+
 ;; Use powerline
 ;(use-package powerline
 ;  :ensure t
@@ -287,10 +294,6 @@
 ;;  :ensure t
 ;;  :config (global-evil-tabs-mode t))
 
-
-;; Fix keymaps
-(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-(define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
