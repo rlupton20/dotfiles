@@ -57,10 +57,6 @@
   (setq monokai-highlight-line "#000000")
   (load-theme 'monokai t))
 
-;;(use-package molokai-theme
- ;; :ensure t)
-
-
 
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
@@ -253,16 +249,6 @@
 (use-package tide
   :ensure t)
 
-
-;;; EVIL AND POWERLINE :: Start evil mode and powerline
-
-;; Use powerline
-;(use-package powerline
-;  :ensure t
-;  :config
-;  (use-package powerline-evil
-;    :ensure t
-;    :config (powerline-evil-vim-color-theme)))
 
 ;;; SPACELINE :: Use spaceline for an emacs powerline
 (use-package spaceline
