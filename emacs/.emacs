@@ -1,6 +1,5 @@
 ;;; Custom emacs configuration.
 
-
 ;;; First we set up the emacs package repository, and require
 ;;; emacs to use it.
 
@@ -9,8 +8,9 @@
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives
+	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
-
 
 ;;; USEPACKAGE :: Check usepackage is installed, and install it
 ;;; otherwise. Usepackage is then used to check other package
@@ -28,21 +28,38 @@
 (tool-bar-mode -1)    ; Turn off tool bar in X mode
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
-(set-frame-font "LiberationMono" nil t)
+(visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
+
+;;; FIXES :: For things which don't behave quite right
+
+;; projectile tries to use the local shel in TRAMP mode
+;; which is a pain on systems which have a different path for
+;; the shell can cause an error (shell can't be found).
+;; Since most systems symlink sh to /bin/bash or the default
+;; shell anyway, we may as well just use sh
+(setq shell-file-name "sh")
 
 ;; EMACS SPECIFIC :: more specific emacs customization
 (put 'narrow-to-region 'disabled nil)
 
-;; RELATIVE-LINE-NUMBERS :: Enable relative line numbers
-;; everywhere.
-(use-package relative-line-numbers
+
+;; LINUM RELATIVE MODE :: use relative line numbering
+(use-package linum-relative
   :ensure t
-  :config (global-relative-line-numbers-mode))
+  :config (linum-relative-global-mode))
+
 
 ;; THEME :: Load the monokai theme
 (use-package monokai-theme
   :ensure t
-  :config (load-theme 'monokai t))
+  :config
+  (setq monokai-bg "#101010")
+  (setq monokai-highlight-line "#000000")
+  (load-theme 'monokai t))
+
+;;(use-package molokai-theme
+ ;; :ensure t)
+
 
 
 ;; HELM :: Use helm in places where it is useful
@@ -75,8 +92,8 @@
   (split-window-horizontally)
   (set-window-buffer (next-window) (other-buffer)))
 
-(global-set-key "\C-x2" 'split-vertical-to-next-buffer)
-(global-set-key "\C-x3" 'split-horizontal-to-next-buffer)
+(global-set-key (kbd "C-x 2") 'split-vertical-to-next-buffer)
+(global-set-key (kbd "C-x 3") 'split-horizontal-to-next-buffer)
 
 ;; Now some function I wrote to switch buffers around
 ;; between different windows.
@@ -94,8 +111,8 @@
 		     (window-buffer (previous-window)))
   (set-window-buffer (previous-window) current)))
 
-(global-set-key (kbd "C-x >") 'switch-buffer-next)
-(global-set-key (kbd "C-x <") 'switch-buffer-previous)
+(global-set-key (kbd "s->") 'switch-buffer-next)
+(global-set-key (kbd "s-<") 'switch-buffer-previous)
 
 
 ;;; There are some packages which are useful across a range of
@@ -104,7 +121,7 @@
 ;; AVY :: Create some keybindings for avy
 (use-package avy
   :ensure t
-  :bind (("C-." . avy-goto-word-1)))
+  :bind (("H-f" . avy-goto-word-1)))
 
 ;; FUZZY :: Fuzzy lets us use fuzzy matching, which is useful
 ;; with packages like auto-complete.
@@ -114,7 +131,7 @@
 ;; AUTO-COMPLETE
 (use-package auto-complete
   :ensure t
-  :bind (("M-n" . auto-complete))
+  :bind (("H-p" . auto-complete))
   :config (require 'auto-complete-config)
           (ac-config-default)
           (setq ac-use-fuzzy t)
@@ -128,7 +145,7 @@
 ;; MAGIT :: Magit is a wrapper for git
 (use-package magit
   :ensure t
-  :bind (("s-g" . magit-status)))
+  :bind (("H-g" . magit-status)))
 
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
@@ -202,8 +219,6 @@
 	  ;;  :config (autoload 'ghc-init "ghc" nil t)
 	   ;;         (autoload 'ghc-debug "ghc" nil t)
 	;;    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-	  (use-package shm
-	    :ensure t)
 	  (use-package flycheck-haskell
 	    :ensure t
 	    :config (eval-after-load 'flycheck
@@ -242,18 +257,47 @@
 ;;; EVIL AND POWERLINE :: Start evil mode and powerline
 
 ;; Use powerline
-(use-package powerline
+;(use-package powerline
+;  :ensure t
+;  :config
+;  (use-package powerline-evil
+;    :ensure t
+;    :config (powerline-evil-vim-color-theme)))
+
+;;; SPACELINE :: Use spaceline for an emacs powerline
+(use-package spaceline
   :ensure t
-  :config
-  (use-package powerline-evil
-    :ensure t
-    :config (powerline-evil-vim-color-theme)))
+  :config (require 'spaceline-config)
+  (spaceline-spacemacs-theme)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  (setq powerline-height 25)
+  (setq powerline-default-separator 'arrow))
+
+
+(use-package evil-leader
+  :ensure t
+  :config (global-evil-leader-mode)
+   (evil-leader/set-leader ",")
+   (evil-leader/set-key
+   "x" 'helm-M-x
+   "f" 'helm-find-files
+   "p" 'helm-projectile-find-file
+   "g" 'magit-status))
+
 
 ;; Allow evil mode to be used if preferred
 (use-package evil
   :ensure t
-  :config
-  (evil-mode t))
+  :config (evil-mode t))
+
+;;(use-package evil-tabs
+;;  :ensure t
+;;  :config (global-evil-tabs-mode t))
+
+
+;; Fix keymaps
+(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+(define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
@@ -261,4 +305,3 @@
 ;; Structure and Interpretation of Computer Programs
 (use-package sicp
   :ensure t)
-

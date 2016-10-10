@@ -3,7 +3,7 @@ urxvt.background:   [93]#101010
 
 URxvt*dynamicColors: on
 
-URxvt.font: xft:LiberationMono:size=10,xft:Liberation Mono for Powerline:size=10
+URxvt.font: xft:Hack:size=11,xft:LiberationMono:size=10,xft:Liberation Mono for Powerline:size=10
 
 URxvt*foreground:   #B2B2B2
 URxvt*cursorColor:  #FFFFFF
@@ -26,3 +26,5 @@ URxvt*color14:      #4BB8FD
 URxvt*color15:      #A020F0
 
 URxvt*scrollBar: False
+
+emacs.font: Hack:size=16

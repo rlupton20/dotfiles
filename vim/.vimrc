@@ -1,3 +1,26 @@
+" Set up Vundle
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'molokai'
+
+call vundle#end()
+
+filetype plugin indent on
+
+" Turn on syntax highlighting and use molokai
+syntax on
+colorscheme molokai
+
+" Set relative line numbering
+set relativenumber
+
+
+" Powerline stuff
+
 :set background&
 
 " Start up powerline
