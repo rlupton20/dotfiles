@@ -110,6 +110,26 @@
 (global-set-key (kbd "s->") 'switch-buffer-next)
 (global-set-key (kbd "s-<") 'switch-buffer-previous)
 
+;; Add a keybinding to F5 to refresh the current buffer (from the file
+;; on the disk
+(global-set-key (kbd "<f5>")
+		(lambda ()
+		  (interactive)
+		  (revert-buffer t t)
+		  (message (concat "Refreshed buffer from " (buffer-file-name)))))
+
+;; Sometimes its useful to revert all open buffers to that on the disk
+(defun revert-all-buffers ()
+  "Refreshes all buffers from the files on disk"
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
+	(revert-buffer t t t) )))
+  (message "Refreshed open files"))
+
+(global-set-key (kbd "<S-f5>") 'revert-all-buffers)
+  
 
 ;;; There are some packages which are useful across a range of
 ;;; modes. We configure them here.
@@ -130,8 +150,8 @@
   :bind (("H-p" . auto-complete))
   :config (require 'auto-complete-config)
           (ac-config-default)
-          (setq ac-use-fuzzy t)
-          (setq ac-auto-start nil))
+          (setq ac-use-fuzzy t))
+
 
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
@@ -223,8 +243,6 @@
 	  (eval-after-load 'haskell-mode
 	    '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
 	  ;; Now we set up haskell-mode in the way which we like
-	  ;; Use structured haskell mode to handle indentation etc.
-	  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 	  (custom-set-variables '(haskell-tags-on-save t)  ; hasktags
 				'(haskell-process-suggest-remove-import-lines t)
 				'(haskell-process-auto-import-loaded-modules t)
