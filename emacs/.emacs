@@ -145,13 +145,18 @@
   :ensure t)
 
 ;; AUTO-COMPLETE
-(use-package auto-complete
-  :ensure t
-  :bind (("H-p" . auto-complete))
-  :config (require 'auto-complete-config)
-          (ac-config-default)
-          (setq ac-use-fuzzy t))
+;;(use-package auto-complete
+;;  :ensure t
+;;  :bind (("H-p" . auto-complete))
+;;  :config (require 'auto-complete-config)
+;;          (ac-config-default)
+;;          (setq ac-use-fuzzy t))
 
+;; COMPANY-MODE :: autocompletion
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
 
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
@@ -255,6 +260,31 @@
   :config
   (elpy-enable))
 
+;; RUST :: emacs configuration for editing rust
+(use-package rust-mode
+  :ensure t
+  :config
+  (use-package cargo
+    :ensure t
+    :config
+    (add-hook 'rust-mode-hook 'cargo-minor-mode))
+  (add-hook 'rust-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (use-package racer
+    :ensure t
+    :config
+    (setq racer-cmd "~/.cargo/bin/racer")
+    (setq racer-rust-src-path "~/rust/")
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode))
+  (use-package flycheck-rust
+    :ensure t
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+  
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
