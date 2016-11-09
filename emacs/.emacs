@@ -29,6 +29,7 @@
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
 (visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
+(setq show-trailing-whitespace t)
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -275,7 +276,7 @@
   (use-package racer
     :ensure t
     :config
-    (setq racer-cmd "~/.cargo/bin/racer")
+    (setq racer-cmd "racer")
     (setq racer-rust-src-path "~/rust/")
     (add-hook 'rust-mode-hook #'racer-mode)
     (add-hook 'racer-mode-hook #'eldoc-mode)
