@@ -29,7 +29,7 @@
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
 (visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
-(setq show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t) ; Show trailing whitespace by default
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -157,7 +157,9 @@
 (use-package company
   :ensure t
   :config
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 1))
 
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
@@ -254,7 +256,7 @@
 				'(haskell-process-auto-import-loaded-modules t)
 				'(haskell-process-log t)
 				'(haskell-process-type 'stack-ghci)))
-	  
+
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
@@ -277,7 +279,7 @@
     :ensure t
     :config
     (setq racer-cmd "racer")
-    (setq racer-rust-src-path "~/rust/")
+    (setq racer-rust-src-path "~/.rust/src")
     (add-hook 'rust-mode-hook #'racer-mode)
     (add-hook 'racer-mode-hook #'eldoc-mode)
     (add-hook 'racer-mode-hook #'company-mode))
