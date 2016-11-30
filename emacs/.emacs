@@ -28,8 +28,8 @@
 (tool-bar-mode -1)    ; Turn off tool bar in X mode
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
-(visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
-(setq-default show-trailing-whitespace t) ; Show trailing whitespace by default
+(global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
+(setq show-trailing-whitespace t)
 
 ;;; FIXES :: For things which don't behave quite right
 
