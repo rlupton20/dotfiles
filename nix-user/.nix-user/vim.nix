@@ -13,6 +13,8 @@ with pkgs; rec {
     vimrcConfig.vam.pluginDictionaries = [
       { names = [
         "molokai"
+        "youcompleteme"
+        "Syntastic"
       ]; }
       ];
   };
