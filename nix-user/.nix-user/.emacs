@@ -121,6 +121,7 @@
 (global-set-key (kbd "<S-f5>") 'revert-all-buffers)
 
 
+
 ;;; There are some packages which are useful across a range of
 ;;; modes. We configure them here.
 
@@ -153,6 +154,31 @@
             :ensure t)
           (helm-projectile-on))
 
+;; EMAMUX :: control tmux sessions from emacs
+(use-package emamux
+  :ensure t)
+
+;; NIX :: Stuff for working with nix
+(use-package nixos-options
+  :ensure t)
+
+(use-package nix-sandbox
+  :ensure t)
+
+;; NIX MODE :: for editing nix files and nix expressions
+(use-package nix-mode
+  :ensure t)
+
+;; Configure some packages to use with particular kinds of files
+
+;; YAML :: Add YAML mode and configure
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yaml$" . yaml-mode))
+
+
+
+;; Some nice things inspired by vim
 
 ;;; SPACELINE :: Use spaceline for an emacs powerline
 (use-package spaceline
@@ -183,3 +209,10 @@
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
+
+
+;;; OTHER NICE THINGS :: Other things that are nice to have
+
+;; Structure and Interpretation of Computer Programs
+(use-package sicp
+  :ensure t)

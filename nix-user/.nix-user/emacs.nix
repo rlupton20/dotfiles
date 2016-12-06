@@ -14,12 +14,20 @@ let
 	yasnippet
 	projectile
 	magit
-	
+	emamux
+
+	nixos-options
+	nix-sandbox
+	nix-mode
+
+	yaml-mode
+
 	spaceline
         evil
         evil-leader
-        haskell-mode
         undo-tree
+
+	sicp
     ]);
 
   dotfile = builtins.readFile ./.emacs;
