@@ -1,6 +1,5 @@
 ;;; Custom emacs configuration.
 
-
 ;;; First we set up the emacs package repository, and require
 ;;; emacs to use it.
 
@@ -12,7 +11,6 @@
 	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
-
 
 ;;; USEPACKAGE :: Check usepackage is installed, and install it
 ;;; otherwise. Usepackage is then used to check other package
@@ -30,26 +28,36 @@
 (tool-bar-mode -1)    ; Turn off tool bar in X mode
 (menu-bar-mode -1)    ; Turn off the menu bar
 (scroll-bar-mode -1)  ; Remove the scrollbar
-(visual-line-mode 1)
+(visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
+(setq-default show-trailing-whitespace t) ; Show trailing whitespace by default
+
+;;; FIXES :: For things which don't behave quite right
+
+;; projectile tries to use the local shel in TRAMP mode
+;; which is a pain on systems which have a different path for
+;; the shell can cause an error (shell can't be found).
+;; Since most systems symlink sh to /bin/bash or the default
+;; shell anyway, we may as well just use sh
+(setq shell-file-name "sh")
 
 ;; EMACS SPECIFIC :: more specific emacs customization
 (put 'narrow-to-region 'disabled nil)
 
-;; RELATIVE-LINE-NUMBERS :: Enable relative line numbers
-;; everywhere.
-;;(use-package relative-line-numbers
-;;  :ensure t
-;;  :config (global-relative-line-numbers-mode))
+
+;; LINUM RELATIVE MODE :: use relative line numbering
 (use-package linum-relative
   :ensure t
   :config (linum-relative-global-mode))
 
+
 ;; THEME :: Load the monokai theme
-;;(use-package monokai-theme
-;;  :ensure t
-;;  :config (load-theme 'monokai t))
-(use-package molokai-theme
-  :ensure t)
+(use-package monokai-theme
+  :ensure t
+  :config
+  (setq monokai-bg "#101010")
+  (setq monokai-highlight-line "#000000")
+  (load-theme 'monokai t))
+
 
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
@@ -81,8 +89,8 @@
   (split-window-horizontally)
   (set-window-buffer (next-window) (other-buffer)))
 
-(global-set-key "\C-x2" 'split-vertical-to-next-buffer)
-(global-set-key "\C-x3" 'split-horizontal-to-next-buffer)
+(global-set-key (kbd "C-x 2") 'split-vertical-to-next-buffer)
+(global-set-key (kbd "C-x 3") 'split-horizontal-to-next-buffer)
 
 ;; Now some function I wrote to switch buffers around
 ;; between different windows.
@@ -103,6 +111,26 @@
 (global-set-key (kbd "s->") 'switch-buffer-next)
 (global-set-key (kbd "s-<") 'switch-buffer-previous)
 
+;; Add a keybinding to F5 to refresh the current buffer (from the file
+;; on the disk
+(global-set-key (kbd "<f5>")
+		(lambda ()
+		  (interactive)
+		  (revert-buffer t t)
+		  (message (concat "Refreshed buffer from " (buffer-file-name)))))
+
+;; Sometimes its useful to revert all open buffers to that on the disk
+(defun revert-all-buffers ()
+  "Refreshes all buffers from the files on disk"
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
+	(revert-buffer t t t) )))
+  (message "Refreshed open files"))
+
+(global-set-key (kbd "<S-f5>") 'revert-all-buffers)
+  
 
 ;;; There are some packages which are useful across a range of
 ;;; modes. We configure them here.
@@ -118,13 +146,20 @@
   :ensure t)
 
 ;; AUTO-COMPLETE
-(use-package auto-complete
+;;(use-package auto-complete
+;;  :ensure t
+;;  :bind (("H-p" . auto-complete))
+;;  :config (require 'auto-complete-config)
+;;          (ac-config-default)
+;;          (setq ac-use-fuzzy t))
+
+;; COMPANY-MODE :: autocompletion
+(use-package company
   :ensure t
-  :bind (("H-p" . auto-complete))
-  :config (require 'auto-complete-config)
-          (ac-config-default)
-          (setq ac-use-fuzzy t)
-          (setq ac-auto-start nil))
+  :config
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 1))
 
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
@@ -208,8 +243,6 @@
 	  ;;  :config (autoload 'ghc-init "ghc" nil t)
 	   ;;         (autoload 'ghc-debug "ghc" nil t)
 	;;    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-	  (use-package shm
-	    :ensure t)
 	  (use-package flycheck-haskell
 	    :ensure t
 	    :config (eval-after-load 'flycheck
@@ -218,20 +251,43 @@
 	  (eval-after-load 'haskell-mode
 	    '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
 	  ;; Now we set up haskell-mode in the way which we like
-	  ;; Use structured haskell mode to handle indentation etc.
-	  (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 	  (custom-set-variables '(haskell-tags-on-save t)  ; hasktags
 				'(haskell-process-suggest-remove-import-lines t)
 				'(haskell-process-auto-import-loaded-modules t)
 				'(haskell-process-log t)
 				'(haskell-process-type 'stack-ghci)))
-	  
+
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
   :config
   (elpy-enable))
 
+;; RUST :: emacs configuration for editing rust
+(use-package rust-mode
+  :ensure t
+  :config
+  (use-package cargo
+    :ensure t
+    :config
+    (add-hook 'rust-mode-hook 'cargo-minor-mode))
+  (add-hook 'rust-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (use-package racer
+    :ensure t
+    :config
+    (setq racer-cmd "racer")
+    (setq racer-rust-src-path "~/.rust/src")
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode))
+  (use-package flycheck-rust
+    :ensure t
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+  
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
@@ -245,35 +301,36 @@
   :ensure t)
 
 
-;;; SPACELINE :: use spaceline for emacs powerline
+;;; SPACELINE :: Use spaceline for an emacs powerline
 (use-package spaceline
   :ensure t
-  :config
-  (require 'spaceline-config)
+  :config (require 'spaceline-config)
   (spaceline-spacemacs-theme)
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  (setq powerline-height 20)
+  (setq powerline-height 25)
   (setq powerline-default-separator 'arrow))
 
 
-;;; EVIL :: set up evil so emacs can be used to edit text as in vim
-
-;; First evil-leader gives a nice fast leader key
 (use-package evil-leader
   :ensure t
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader ",")
-  (evil-leader/set-key
+  :config (global-evil-leader-mode)
+   (evil-leader/set-leader ",")
+   (evil-leader/set-key
    "x" 'helm-M-x
    "f" 'helm-find-files
+   "p" 'helm-projectile-find-file
    "g" 'magit-status))
+
 
 ;; Allow evil mode to be used if preferred
 (use-package evil
   :ensure t
-  :config
-  (evil-mode t))
+  :config (evil-mode t))
+
+;;(use-package evil-tabs
+;;  :ensure t
+;;  :config (global-evil-tabs-mode t))
+
 
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
@@ -285,4 +342,3 @@
 ;; Structure and Interpretation of Computer Programs
 (use-package sicp
   :ensure t)
-
