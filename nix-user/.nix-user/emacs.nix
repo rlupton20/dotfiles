@@ -22,6 +22,11 @@ let
 
 	yaml-mode
 
+	haskell-mode
+	hindent
+	ghc-mod
+	company-ghc
+
 	spaceline
         evil
         evil-leader

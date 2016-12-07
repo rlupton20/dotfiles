@@ -176,6 +176,28 @@
   :ensure t
   :mode ("\\.yaml$" . yaml-mode))
 
+;; HASKELL :: Modes for working with Haskell
+(use-package haskell-mode
+  :ensure t
+  :config 
+  (custom-set-variables '(haskell-tags-on-save t)))
+
+(use-package hindent
+  :ensure t
+  :config (add-hook 'haskell-mode-hook #'hindent-mode))
+
+(use-package ghc
+  :ensure t
+  :config (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+
+(use-package company-ghc
+  :ensure t
+  :config (add-to-list 'company-backends 'company-ghc)
+  (custom-set-variables '(company-ghc-show-info t)))
+
+(add-hook 'haskell-mode-hook 'subword-mode)
 
 
 ;; Some nice things inspired by vim

@@ -7,6 +7,14 @@ with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
 let
   gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
+  ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
+      happy
+      hindent
+      hasktags
+      stylish-haskell
+      ghc-mod
+      hlint
+    ]);
 in
 {
   inherit
@@ -17,6 +25,7 @@ in
     custom-vim
     custom-emacs
 
+    ghc
     weechat
     
     gnupg1compat
