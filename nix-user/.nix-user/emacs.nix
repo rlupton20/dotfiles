@@ -14,6 +14,7 @@ let
 	yasnippet
 	projectile
 	magit
+	flycheck
 	emamux
 
 	nixos-options
@@ -26,6 +27,11 @@ let
 	hindent
 	ghc-mod
 	company-ghc
+
+	rust-mode
+	cargo
+	racer
+	flycheck-rust
 
 	spaceline
         evil
@@ -55,7 +61,8 @@ in
           local progname=$(basename "$prog")
           rm -f "$out/bin/$progname"
           makeWrapper "$prog" "$out/bin/$progname" \
-            --suffix EMACSLOADPATH ":" "$out/share/emacs/site-lisp:$deps/share/emacs/site-lisp:"
+            --suffix EMACSLOADPATH ":" "$out/share/emacs/site-lisp:$deps/share/emacs/site-lisp:" \
+	    --set RUST_SRC_PATH "${rustPlatform.rust.rustc.src}/src"
         done
       '';
     }); 

@@ -136,6 +136,15 @@
   :config
   (add-hook 'after-init-hook 'global-company-mode))
 
+;; FLYCHECK :: On the fly syntax checking
+(use-package flycheck
+  :ensure t
+  :config (setq flycheck-command-wrapper-function
+		  (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+		flycheck-executable-find
+		  (lambda (command) (nix-executable-find (nix-current-sandbox) command)))
+          (global-flycheck-mode))
+
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
   :ensure t
@@ -199,6 +208,36 @@
 
 (add-hook 'haskell-mode-hook 'subword-mode)
 
+
+;; RUST :: emacs configuration for editing rust
+
+(use-package rust-mode
+  :ensure t
+  :config
+  (add-hook 'rust-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer))))
+
+(use-package cargo
+  :ensure t
+  :after rust-mode
+  :config
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+
+(use-package racer
+  :ensure t
+  :after rust-mode
+  :config
+  (setq racer-cmd "racer")
+  (setq racer-rust-src-path (getenv "RUST_SRC_PATH"))
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode))
+
+(use-package flycheck-rust
+  :ensure t
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 ;; Some nice things inspired by vim
 

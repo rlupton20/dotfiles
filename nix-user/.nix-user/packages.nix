@@ -18,6 +18,8 @@ let
 in
 {
   inherit
+    stdenv
+    
     ranger
     zathura
     htop
@@ -26,6 +28,12 @@ in
     custom-emacs
 
     ghc
+
+    rustc
+    cargo
+    rustfmt
+    racer
+    
     weechat
     
     gnupg1compat
