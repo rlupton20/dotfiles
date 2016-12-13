@@ -32,7 +32,7 @@ in
     rustc
     cargo
     rustfmt
-    racer
+    rustracer
     
     weechat
     
