@@ -76,6 +76,7 @@
 (use-package git-gutter
   :ensure t
   :after linum-relative
+  :bind (("H-g" . git-gutter-mode))
   :config
   (setq dotemacs:background-colour monokai-background)
   (git-gutter:linum-setup)
@@ -178,8 +179,7 @@
 
 ;; MAGIT :: Magit is a wrapper for git
 (use-package magit
-  :ensure t
-  :bind (("H-g" . magit-status)))
+  :ensure t)
 
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
@@ -339,8 +339,7 @@
    "x" 'helm-M-x
    "f" 'helm-find-files
    "p" 'helm-projectile-find-file
-   "g" 'magit-status
-   "d" 'git-gutter-mode))
+   "g" 'magit-status))
 
 
 ;; Allow evil mode to be used if preferred
