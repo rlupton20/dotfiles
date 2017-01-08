@@ -54,7 +54,7 @@
 (use-package monokai-theme
   :ensure t
   :config
-  (setq monokai-bg "#101010")
+  (setq monokai-background "#101010")
   (setq monokai-highlight-line "#000000")
   (load-theme 'monokai t))
 
@@ -71,6 +71,24 @@
           ;; Finding files can also be a pain, so use helm
           ;; to locate and open files
           ("C-x C-f" . helm-find-files)))
+
+;; GIT GUTTER :: Display change indicators in margin
+(use-package git-gutter
+  :ensure t
+  :after linum-relative
+  :config
+  (setq dotemacs:background-colour monokai-background)
+  (git-gutter:linum-setup)
+  (custom-set-variables
+   '(git-gutter:modified-sign "~>")
+   '(git-gutter:added-sign "++")
+   '(git-gutter:deleted-sign "--"))
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-background 'git-gutter:added dotemacs:background-colour)
+  (set-face-foreground 'git-gutter:deleted "red")
+  (set-face-background 'git-gutter:deleted dotemacs:background-colour)
+  (set-face-foreground 'git-gutter:modified "cyan")
+  (set-face-background 'git-gutter:modified dotemacs:background-colour))
 
 
 ;;; Odd tweaks for general behaviour
@@ -130,7 +148,7 @@
   (message "Refreshed open files"))
 
 (global-set-key (kbd "<S-f5>") 'revert-all-buffers)
-  
+
 
 ;;; There are some packages which are useful across a range of
 ;;; modes. We configure them here.
@@ -144,14 +162,6 @@
 ;; with packages like auto-complete.
 (use-package fuzzy
   :ensure t)
-
-;; AUTO-COMPLETE
-;;(use-package auto-complete
-;;  :ensure t
-;;  :bind (("H-p" . auto-complete))
-;;  :config (require 'auto-complete-config)
-;;          (ac-config-default)
-;;          (setq ac-use-fuzzy t))
 
 ;; COMPANY-MODE :: autocompletion
 (use-package company
@@ -180,12 +190,25 @@
           (helm-projectile-on))
 
 ;; FLYCHECK :: On the fly syntax checking
+
+;; First we write some utility functions to look inside a nix sandbox, but only if
+;; there is one
+(defun nix-maybe-shell-command (command)
+  (if (nix-current-sandbox)
+      (apply 'nix-shell-command (nix-current-sandbox) command)
+    command))
+
+(defun nix-maybe-executable-find (command)
+  (if (nix-current-sandbox)
+      (apply 'nix-executable-find (nix-current-sandbox) command)
+    command))
+
 (use-package flycheck
   :ensure t
   :config (setq flycheck-command-wrapper-function
-		  (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+		(lambda (command) command)
 		flycheck-executable-find
-		  (lambda (command) (nix-executable-find (nix-current-sandbox) command)))
+		(lambda (command) command))
           (global-flycheck-mode))
 
 (use-package multiple-cursors
@@ -210,10 +233,16 @@
   :ensure t
   :mode ("\\.yaml$" . yaml-mode))
 
+;; EMAMUX :: control tmux sessions from emacs
+(use-package emamux
+  :ensure t)
+
 
 ;; Do some Haskell specific configuration.
 
-;; HASKELL :: haskell-mode
+;; HASKELL :: modes for working with Haskell code
+;; -- External dependencies --
+;; happy, hindent, hasktags, stylish-haskell, ghc-mod, hlint, hoogle, hare
 
 ;; Haskell modes use various packages installed by cabal,
 ;; so we need to add cabal's bin directory to our path
@@ -222,40 +251,23 @@
     (setenv "PATH" (concat cabal-path path-separator (getenv "PATH")))
     (add-to-list 'exec-path cabal-path)))
 
+(defun add-stack-path ()
+  (let ((stack-path (expand-file-name "~/.local/bin/")))
+    (setenv "PATH" (concat stack-path path-separator (getenv "PATH")))
+    (add-to-list 'exec-path stack-path)))
 
-;; Make it possible to launch ghci instances from emacs
 (use-package haskell-mode
   :ensure t
   :config (add-cabal-path)
-          (require 'haskell-interactive-mode)
-          (require 'haskell-process)
-	  ;; First lets make haskell-mode able to use the nix environment
-	  (setq haskell-process-wrapper-function
-		(lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
-          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-	  ;; Add hindent and make it load automaticall with haskell-mode
-	  (use-package hindent
-	    :ensure t
-	    :config (add-hook 'haskell-mode-hook #'hindent-mode))
-	  ;; Add package ghc to work with ghc-mod
-	  ;; (use-package ghc
-	  ;;  :ensure t
-	  ;;  :config (autoload 'ghc-init "ghc" nil t)
-	   ;;         (autoload 'ghc-debug "ghc" nil t)
-	;;    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-	  (use-package flycheck-haskell
-	    :ensure t
-	    :config (eval-after-load 'flycheck
-		      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
-	  ;; Add jump to imports shortcut
-	  (eval-after-load 'haskell-mode
-	    '(define-key haskell-mode-map [f8] 'haskell-navigate-imports))
-	  ;; Now we set up haskell-mode in the way which we like
-	  (custom-set-variables '(haskell-tags-on-save t)  ; hasktags
-				'(haskell-process-suggest-remove-import-lines t)
-				'(haskell-process-auto-import-loaded-modules t)
-				'(haskell-process-log t)
-				'(haskell-process-type 'stack-ghci)))
+  (add-stack-path)
+  (custom-set-variables '(haskell-tags-on-save t))
+  (add-hook 'haskell-mode-hook 'subword-mode))
+
+(use-package intero
+  :ensure t
+  :after haskell-mode
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
@@ -287,7 +299,7 @@
     :ensure t
     :config
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
-  
+
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
@@ -319,7 +331,8 @@
    "x" 'helm-M-x
    "f" 'helm-find-files
    "p" 'helm-projectile-find-file
-   "g" 'magit-status))
+   "g" 'magit-status
+   "d" 'git-gutter-mode))
 
 
 ;; Allow evil mode to be used if preferred
