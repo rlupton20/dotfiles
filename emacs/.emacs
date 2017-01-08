@@ -184,7 +184,7 @@
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
   :ensure t
-  :config (projectile-global-mode)
+  :config (projectile-mode)
           (use-package helm-projectile
             :ensure t)
           (helm-projectile-on))
@@ -238,8 +238,6 @@
   :ensure t)
 
 
-;; Do some Haskell specific configuration.
-
 ;; HASKELL :: modes for working with Haskell code
 ;; -- External dependencies --
 ;; happy, hindent, hasktags, stylish-haskell, ghc-mod, hlint, hoogle, hare
@@ -269,44 +267,54 @@
   :config
   (add-hook 'haskell-mode-hook 'intero-mode))
 
+
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
   :config
   (elpy-enable))
 
+
 ;; RUST :: emacs configuration for editing rust
 (use-package rust-mode
   :ensure t
   :config
-  (use-package cargo
-    :ensure t
-    :config
-    (add-hook 'rust-mode-hook 'cargo-minor-mode))
   (add-hook 'rust-mode-hook
 	    (lambda ()
-	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (use-package racer
+	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer))))
+
+(use-package cargo
+  :ensure t
+  :after rust-mode
+  :config
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+
+(use-package racer
+  :ensure t
+  :after rust-mode
+  :config
+  (setq racer-cmd "racer")
+  (setq racer-rust-src-path "~/.rust/src")
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode))
+
+(use-package flycheck-rust
     :ensure t
+    :after flycheck
     :config
-    (setq racer-cmd "racer")
-    (setq racer-rust-src-path "~/.rust/src")
-    (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode))
-  (use-package flycheck-rust
-    :ensure t
-    :config
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
 
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
 
+
 ;;; JavaScript :: editing mode and extensions for JavaScript
 (use-package js3-mode
   :ensure t)
+
 
 ;;; TypeScript :: editing mode for TypeScript
 (use-package tide
@@ -339,11 +347,6 @@
 (use-package evil
   :ensure t
   :config (evil-mode t))
-
-;;(use-package evil-tabs
-;;  :ensure t
-;;  :config (global-evil-tabs-mode t))
-
 
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
