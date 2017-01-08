@@ -3,6 +3,7 @@
 with (import <nixpkgs> {}); 
 with (import <nixpkgs> {}).haskellPackages; 
 with (import <nixpkgs> {}).xorg; 
+with (import <nixpkgs> {}).gitAndTools;
 with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
 let
@@ -21,6 +22,7 @@ in
     stdenv
     gcc
     ack
+    stgit
     
     ranger
     zathura
