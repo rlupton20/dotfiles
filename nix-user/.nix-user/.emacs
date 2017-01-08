@@ -191,20 +191,10 @@
   :config 
   (custom-set-variables '(haskell-tags-on-save t)))
 
-(use-package hindent
+(use-package intero
   :ensure t
-  :config (add-hook 'haskell-mode-hook #'hindent-mode))
-
-(use-package ghc
-  :ensure t
-  :config (autoload 'ghc-init "ghc" nil t)
-  (autoload 'ghc-debug "ghc" nil t)
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-
-(use-package company-ghc
-  :ensure t
-  :config (add-to-list 'company-backends 'company-ghc)
-  (custom-set-variables '(company-ghc-show-info t)))
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 (add-hook 'haskell-mode-hook 'subword-mode)
 

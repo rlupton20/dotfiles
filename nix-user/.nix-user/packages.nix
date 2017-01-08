@@ -19,6 +19,8 @@ in
 {
   inherit
     stdenv
+    gcc
+    ack
     
     ranger
     zathura
@@ -28,6 +30,7 @@ in
     custom-emacs
 
     ghc
+    stack
 
     rustc
     cargo

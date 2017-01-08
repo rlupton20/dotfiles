@@ -24,9 +24,7 @@ let
 	yaml-mode
 
 	haskell-mode
-	hindent
-	ghc-mod
-	company-ghc
+	intero
 
 	rust-mode
 	cargo
