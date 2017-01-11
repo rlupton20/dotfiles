@@ -31,6 +31,7 @@
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
 
+
 ;;; FIXES :: For things which don't behave quite right
 
 ;; projectile tries to use the local shel in TRAMP mode
@@ -49,7 +50,6 @@
   :ensure t
   :config (linum-relative-global-mode))
 
-
 ;; THEME :: Load the monokai theme
 (use-package monokai-theme
   :ensure t
@@ -58,6 +58,16 @@
   (setq monokai-highlight-line "#000000")
   (load-theme 'monokai t))
 
+;; WHITESPACE MODE :: Configure whitespace mode to show potential
+;; untidiness in code. Add it automatically to programming modes.
+(use-package whitespace
+  :ensure t
+  :config
+  (setq whitespace-style '(face tabs lines big-indent))
+  (set-face-attribute 'whitespace-line nil
+		      :background "#8B4513"
+		      :foreground 'unspecified)
+  (add-hook 'prog-mode-hook 'whitespace-mode))
 
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
@@ -78,18 +88,18 @@
   :after linum-relative
   :bind (("H-g" . git-gutter-mode))
   :config
-  (setq dotemacs:background-colour monokai-background)
-  (git-gutter:linum-setup)
-  (custom-set-variables
-   '(git-gutter:modified-sign "~>")
-   '(git-gutter:added-sign "++")
-   '(git-gutter:deleted-sign "--"))
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-background 'git-gutter:added dotemacs:background-colour)
-  (set-face-foreground 'git-gutter:deleted "red")
-  (set-face-background 'git-gutter:deleted dotemacs:background-colour)
-  (set-face-foreground 'git-gutter:modified "cyan")
-  (set-face-background 'git-gutter:modified dotemacs:background-colour))
+  (let ((dotemacs:background-colour monokai-background))
+    (git-gutter:linum-setup)
+    (custom-set-variables
+     '(git-gutter:modified-sign "~>")
+     '(git-gutter:added-sign "++")
+     '(git-gutter:deleted-sign "--"))
+    (set-face-foreground 'git-gutter:added "green")
+    (set-face-background 'git-gutter:added dotemacs:background-colour)
+    (set-face-foreground 'git-gutter:deleted "red")
+    (set-face-background 'git-gutter:deleted dotemacs:background-colour)
+    (set-face-foreground 'git-gutter:modified "cyan")
+    (set-face-background 'git-gutter:modified dotemacs:background-colour)))
 
 
 ;;; Odd tweaks for general behaviour
@@ -114,6 +124,7 @@
 ;; Now some function I wrote to switch buffers around
 ;; between different windows.
 (defun switch-buffer-next ()
+  "Switch current and next window's buffers."
   (interactive)
   (let ((current (window-buffer)))
   (set-window-buffer nil
@@ -121,6 +132,7 @@
   (set-window-buffer (next-window) current)))
 
 (defun switch-buffer-previous ()
+  "Switch current and previous window's buffers."
   (interactive)
   (let ((current (window-buffer)))
   (set-window-buffer nil
@@ -136,15 +148,18 @@
 		(lambda ()
 		  (interactive)
 		  (revert-buffer t t)
-		  (message (concat "Refreshed buffer from " (buffer-file-name)))))
+		  (message
+		   (concat "Refreshed buffer from " (buffer-file-name)))))
 
 ;; Sometimes its useful to revert all open buffers to that on the disk
 (defun revert-all-buffers ()
-  "Refreshes all buffers from the files on disk"
+  "Refreshes all buffers from the files on disk."
   (interactive)
   (dolist (buf (buffer-list))
     (with-current-buffer buf
-      (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
+      (when (and (buffer-file-name)
+		 (file-exists-p (buffer-file-name))
+		 (not (buffer-modified-p)))
 	(revert-buffer t t t) )))
   (message "Refreshed open files"))
 
@@ -191,8 +206,8 @@
 
 ;; FLYCHECK :: On the fly syntax checking
 
-;; First we write some utility functions to look inside a nix sandbox, but only if
-;; there is one
+;; First we write some utility functions to look inside a nix sandbox, but only
+;; if there is one
 (defun nix-maybe-shell-command (command)
   (if (nix-current-sandbox)
       (apply 'nix-shell-command (nix-current-sandbox) command)
