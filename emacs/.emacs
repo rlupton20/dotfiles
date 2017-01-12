@@ -34,7 +34,7 @@
 
 ;;; FIXES :: For things which don't behave quite right
 
-;; projectile tries to use the local shel in TRAMP mode
+;; projectile tries to use the local shell in TRAMP mode
 ;; which is a pain on systems which have a different path for
 ;; the shell can cause an error (shell can't be found).
 ;; Since most systems symlink sh to /bin/bash or the default
@@ -68,6 +68,13 @@
 		      :background "#8B4513"
 		      :foreground 'unspecified)
   (add-hook 'prog-mode-hook 'whitespace-mode))
+
+;; TRAMP :: Fix tramps remote paths - this is needed in order that
+;; we find programs in user profiles on remote nix boxes
+(use-package tramp
+  :ensure t
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
