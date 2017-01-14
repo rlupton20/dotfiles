@@ -5,6 +5,7 @@ let
       with epkgs.melpaStablePackages; with emacsPackagesNg; [
         use-package
         monokai-theme
+	smartparens
 	linum-relative
 
 	helm

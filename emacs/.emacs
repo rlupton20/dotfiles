@@ -1,11 +1,14 @@
-;;; Custom emacs configuration.
+;;; .emacs --- Custom emacs configuration.
+;;; Commentary:
+;;; Custom Emacs configuration
+(require 'package)
+;;; Code:
 
 ;;; First we set up the emacs package repository, and require
 ;;; emacs to use it.
 
 ;; We would like to be able to install packages from MELPA
 ;; so lets include the repository
-(require 'package)
 (package-initialize)
 (add-to-list 'package-archives
 	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -65,9 +68,21 @@
   :config
   (setq whitespace-style '(face tabs lines big-indent))
   (set-face-attribute 'whitespace-line nil
-		      :background "#8B4513"
+		      :background "#2B1609"
 		      :foreground 'unspecified)
   (add-hook 'prog-mode-hook 'whitespace-mode))
+
+(use-package smartparens
+  :ensure t
+  :config
+  (set-face-attribute 'sp-pair-overlay-face nil
+		      :background "#303030")
+  ;; Enable smartparens in elisp mode
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode))
+
+;;; Notes to write function to highlight current region
+;;; sp-get-enclosing-sexp
+
 
 ;; TRAMP :: Fix tramps remote paths - this is needed in order that
 ;; we find programs in user profiles on remote nix boxes
@@ -372,10 +387,13 @@
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
-
+(define-key evil-insert-state-map (kbd "C-j") 'sp-up-sexp)
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
 
 ;; Structure and Interpretation of Computer Programs
 (use-package sicp
   :ensure t)
+
+(provide '.emacs)
+;;; .emacs ends here
