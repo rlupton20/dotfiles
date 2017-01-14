@@ -1,12 +1,12 @@
 {pkgs ? import <nixpkgs> {} }:
 with pkgs;
 let
-  base-emacs = emacsWithPackages (epkgs: 
+  base-emacs = emacsWithPackages (epkgs:
       with epkgs.melpaStablePackages; with emacsPackagesNg; [
         use-package
         monokai-theme
 	linum-relative
-	
+
 	helm
 	helm-projectile
 	company
@@ -15,6 +15,7 @@ let
 	projectile
 	magit
 	flycheck
+	git-gutter
 	emamux
 
 	nixos-options
@@ -26,10 +27,16 @@ let
 	haskell-mode
 	intero
 
+	elpy
+
 	rust-mode
 	cargo
 	racer
 	flycheck-rust
+
+	ess
+	js3-mode
+	tide
 
 	spaceline
         evil
@@ -52,7 +59,7 @@ in
       installPhase = oldAttrs.installPhase + ''
         mkdir -p $out/share/emacs/site-lisp/
 
-        echo "$dotemacs" >$out/share/emacs/site-lisp/site-start.el 
+        echo "$dotemacs" >$out/share/emacs/site-lisp/site-start.el
 
         # Rewrap the emacs binaries to find our config file
         for prog in $emacs/bin/*; do # */
@@ -63,5 +70,5 @@ in
 	    --set RUST_SRC_PATH "${rustPlatform.rust.rustc.src}/src"
         done
       '';
-    }); 
+    });
     }
