@@ -1,7 +1,23 @@
 {pkgs ? import <nixpkgs> {} }:
 with pkgs;
 let
-  base-emacs = emacsWithPackages (epkgs: [
+
+  custom-emacs-platform =
+    emacsPackagesNg.override (super: self: {
+      emacs = emacs25;
+
+      # Package set overrides
+      monokai-theme = self.melpaPackages.monokai-theme;
+      linum-relative = self.melpaPackages.linum-relative;
+      
+      evil = self.melpaPackages.evil;
+      undo-tree = self.melpaPackages.undo-tree;
+      evil-leader = self.melpaPackages.evil-leader;
+
+      intero = self.melpaPackages.intero;
+    }); 
+
+  base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: [
         epkgs.use-package
         epkgs.monokai-theme
 	epkgs.smartparens
