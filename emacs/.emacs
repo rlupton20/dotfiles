@@ -196,11 +196,6 @@
   :ensure t
   :bind (("H-f" . avy-goto-word-1)))
 
-;; FUZZY :: Fuzzy lets us use fuzzy matching, which is useful
-;; with packages like auto-complete.
-(use-package fuzzy
-  :ensure t)
-
 ;; COMPANY-MODE :: autocompletion
 (use-package company
   :ensure t
@@ -251,8 +246,8 @@
 (use-package multiple-cursors
   :ensure t)
 
-;;; Now we configure packages for individual editing modes.
 
+;;; Now we configure packages for individual editing modes.
 
 ;; NIX :: Specific stuff for working in nix
 (use-package nixos-options

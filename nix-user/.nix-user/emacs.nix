@@ -18,6 +18,7 @@ let
 	flycheck
 	git-gutter
 	emamux
+	multiple-cursors
 
 	nixos-options
 	nix-sandbox
