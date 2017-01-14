@@ -76,12 +76,18 @@
   :ensure t
   :config
   (set-face-attribute 'sp-pair-overlay-face nil
-		      :background "#303030")
-  ;; Enable smartparens in elisp mode
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode))
+		      :background "#404040"))
 
-;;; Notes to write function to highlight current region
-;;; sp-get-enclosing-sexp
+;; Elisp :: Setup for editing emacs lisp
+(use-package hl-sexp
+  :ensure t
+  :config
+  (set-face-attribute 'hl-sexp-face nil
+		      :background "#303030")
+  (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode))
+
+;; Enable smartparens in elisp mode
+(add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
 
 
 ;; TRAMP :: Fix tramps remote paths - this is needed in order that

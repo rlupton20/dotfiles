@@ -35,6 +35,8 @@ let
 	epkgs.emamux
 	epkgs.multiple-cursors
 
+	epkgs.hl-sexp
+
 	epkgs.nixos-options
 	epkgs.nix-sandbox
 	epkgs.nix-mode
