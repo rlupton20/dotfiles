@@ -11,6 +11,11 @@ import System.IO
 
 -- The main xmonad modifier key is set here
 defaultMask = mod4Mask
+-- We use hyper for some commands also
+hyper = mod3Mask
+
+toggleMouse :: String
+toggleMouse = "xinput --list-props 11 | awk '/Device Enabled/ {toggle = 1 - $4; print toggle}' | xargs xinput set-int-prop 11 \"Device Enabled\" 8"
 
 main = do
   xmproc <- spawnPipe "xmobar"
@@ -32,14 +37,8 @@ main = do
 
     defaultLayouts = (avoidStruts $ smartBorders $ layoutHook defaultConfig) ||| (noBorders Full)
 
-    makeEmacsPanel :: X ()
-    makeEmacsPanel = do
-      setLayout (Layout $ avoidStruts $ noBorders (Full :: Full Window))
-      spawn "emacs-client"
-      
-
     insertkeys :: XConfig l -> [((KeyMask,KeySym), X ())]
-    insertkeys _ = [ ((defaultMask, xK_p), spawn "$(yeganesh -x -- -h 30 -y 400 -nb '#303030' -nf '#505050' -sb '#0099FF' -sf '#303030' -fn 'LiberationMono-10:bold')")
-                   , ((controlMask, xK_i), spawn "xcalib -i -a")
-                   , ((defaultMask, xK_a), makeEmacsPanel)
+    insertkeys _ = [ ((defaultMask, xK_p), spawn "dmenu_run") --"$(yeganesh -x -- -h 30 -y 400 -nb '#303030' -nf '#505050' -sb '#0099FF' -sf '#303030' -fn 'LiberationMono-10:bold')")
+                   , ((defaultMask, xK_s), spawn "i3lock && xset dpms force off")
+                   , ((hyper, xK_space), spawn toggleMouse)
                    , ((defaultMask, xK_t), spawn "tmux-launcher") ]
