@@ -1,51 +1,50 @@
 {pkgs ? import <nixpkgs> {} }:
 with pkgs;
 let
-  base-emacs = emacsWithPackages (epkgs:
-      with epkgs.melpaStablePackages; with emacsPackagesNg; [
-        use-package
-        monokai-theme
-	smartparens
-	linum-relative
+  base-emacs = emacsWithPackages (epkgs: [
+        epkgs.use-package
+        epkgs.monokai-theme
+	epkgs.smartparens
+	epkgs.linum-relative
 
-	helm
-	helm-projectile
-	company
-	avy
-	yasnippet
-	projectile
-	magit
-	flycheck
-	git-gutter
-	emamux
-	multiple-cursors
+	epkgs.helm
+	epkgs.helm-projectile
+	epkgs.company
+	epkgs.avy
+	epkgs.yasnippet
+	epkgs.projectile
+	epkgs.magit
+	epkgs.flycheck
+	epkgs.git-gutter
+	epkgs.emamux
+	epkgs.multiple-cursors
 
-	nixos-options
-	nix-sandbox
-	nix-mode
+	epkgs.nixos-options
+	epkgs.nix-sandbox
+	epkgs.nix-mode
 
-	yaml-mode
+	epkgs.yaml-mode
 
-	haskell-mode
-	intero
+	epkgs.haskell-mode
+	epkgs.intero
 
-	elpy
+	epkgs.elpy
 
-	rust-mode
-	cargo
-	racer
-	flycheck-rust
+	epkgs.rust-mode
+	epkgs.cargo
+	epkgs.racer
+	epkgs.flycheck-rust
 
-	ess
-	js3-mode
-	tide
+	epkgs.ess
+	epkgs.js3-mode
+	epkgs.tide
 
-	spaceline
-        evil
-        evil-leader
-        undo-tree
+	epkgs.spaceline
+        epkgs.evil
+        epkgs.evil-leader
+        epkgs.undo-tree
 
-	sicp
+	epkgs.sicp
     ]);
 
   dotfile = builtins.readFile ./.emacs;
