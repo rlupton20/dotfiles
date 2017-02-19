@@ -43,6 +43,9 @@ let
 
 	epkgs.yaml-mode
 
+	epkgs.ggtags
+	epkgs.helm-gtags
+
 	epkgs.haskell-mode
 	epkgs.intero
 
@@ -53,14 +56,16 @@ let
 	epkgs.racer
 	epkgs.flycheck-rust
 
+  epkgs.elm-mode
+
 	epkgs.ess
 	epkgs.js3-mode
 	epkgs.tide
 
 	epkgs.spaceline
-        epkgs.evil
-        epkgs.evil-leader
-        epkgs.undo-tree
+  epkgs.evil
+  epkgs.evil-leader
+  epkgs.undo-tree
 
 	epkgs.sicp
     ]);

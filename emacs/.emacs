@@ -34,6 +34,8 @@
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
 
+(global-hl-line-mode)
+(set-face-background 'hl-line "#202020")
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -344,6 +346,12 @@
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 
+;;; ELM :: editing modes and configuration for elm
+(use-package elm-mode
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-elm))
+
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
@@ -374,6 +382,7 @@
   :config (global-evil-leader-mode)
    (evil-leader/set-leader ",")
    (evil-leader/set-key
+   "V" 'global-hl-line-mode
    "x" 'helm-M-x
    "f" 'helm-find-files
    "p" 'helm-projectile-find-file
