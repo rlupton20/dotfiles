@@ -7,7 +7,9 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe, runProcessWithInput)
 import XMonad.Util.CustomKeys
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Tabbed (simpleTabbed)
 import System.IO
+import Data.Default
 
 -- The main xmonad modifier key is set here
 defaultMask = mod4Mask
@@ -21,21 +23,23 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ customConfig xmproc
   where
-    customConfig xmproc = defaultConfig { terminal = "urxvt"
-                                 , manageHook = manageDocks <+> manageHook defaultConfig
-                                 , layoutHook = defaultLayouts
-                                 , logHook = dynamicLogWithPP xmobarPP { ppOutput = hPutStrLn xmproc
-                                                                       , ppTitle = xmobarColor "#69FF24" "" . shorten 50
-                                                                       , ppCurrent = (\w -> xmobarColor "#FF6A00" "" $ "[" ++ w ++ "]")
-                                                                       , ppHidden  = xmobarColor "#828282" ""
-                                                                       , ppSep = xmobarColor "#FF0088" "" " : "
-                                                                       , ppLayout = xmobarColor "#828282" ""
-                                                                       }
-                                 , focusedBorderColor = "#6AD4F7"
-                                 , modMask = defaultMask
-                                 , keys = customKeys (\_ -> []) insertkeys }
+    customConfig xmproc = def { terminal = "urxvt"
+                              , manageHook = manageDocks <+> manageHook def
+                              , layoutHook = defaultLayouts
+                              , handleEventHook = docksEventHook <+> handleEventHook def
+                              , startupHook = docksStartupHook <+> startupHook def
+                              , logHook = dynamicLogWithPP xmobarPP { ppOutput = hPutStrLn xmproc
+                                                                    , ppTitle = xmobarColor "#69FF24" "" . shorten 50
+                                                                    , ppCurrent = (\w -> xmobarColor "#FF6A00" "" $ "[" ++ w ++ "]")
+                                                                    , ppHidden  = xmobarColor "#828282" ""
+                                                                    , ppSep = xmobarColor "#FF0088" "" " : "
+                                                                    , ppLayout = xmobarColor "#828282" ""
+                                                                    }
+                              , focusedBorderColor = "#6AD4F7"
+                              , modMask = defaultMask
+                              , keys = customKeys (\_ -> []) insertkeys }
 
-    defaultLayouts = (avoidStruts $ smartBorders $ layoutHook defaultConfig) ||| (noBorders Full)
+    defaultLayouts = (avoidStruts $ smartBorders $ layoutHook def) ||| (noBorders Full)
 
     insertkeys :: XConfig l -> [((KeyMask,KeySym), X ())]
     insertkeys _ = [ ((defaultMask, xK_p), spawn "dmenu_run") --"$(yeganesh -x -- -h 30 -y 400 -nb '#303030' -nf '#505050' -sb '#0099FF' -sf '#303030' -fn 'LiberationMono-10:bold')")
