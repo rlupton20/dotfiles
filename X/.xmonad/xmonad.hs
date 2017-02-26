@@ -21,6 +21,8 @@ toggleMouse = "xinput --list-props 11 | awk '/Device Enabled/ {toggle = 1 - $4; 
 
 main = do
   xmproc <- spawnPipe "xmobar"
+  _ <- spawn "xmodmap ~/.Xmodmap"
+  _ <- spawn "feh --bg-scale ~/.Wallpaper"
   xmonad $ customConfig xmproc
   where
     customConfig xmproc = def { terminal = "urxvt"
