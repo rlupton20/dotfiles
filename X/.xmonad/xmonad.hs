@@ -25,7 +25,7 @@ main = do
   _ <- spawn "feh --bg-scale ~/.Wallpaper"
   xmonad $ customConfig xmproc
   where
-    customConfig xmproc = def { terminal = "urxvt"
+    customConfig xmproc = def { terminal = "urxvt -tr -sh 25"
                               , manageHook = manageDocks <+> manageHook def
                               , layoutHook = defaultLayouts
                               , handleEventHook = docksEventHook <+> handleEventHook def
