@@ -5,6 +5,8 @@ with (import <nixpkgs> {}).xorg;
 with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
 let
+  unstable = import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
+
   yeganesh = haskellPackages.yeganesh;
 
   stgit = gitAndTools.stgit;
@@ -29,6 +31,8 @@ let
 #  elm-oracle = elmPackages.elm-oracle;
 #  elm-format = elmPackages.elm-format;
 #  elm-test = elmPackages.elm-test;
+
+  powerline = unstable.python35Packages.powerline;
 in
 {
   inherit
@@ -36,13 +40,13 @@ in
     gcc
     ack
     global
-    stgit
     
     ranger
     zathura
     htop
     yeganesh
     tmux
+    powerline
 
     custom-vim
     custom-emacs
