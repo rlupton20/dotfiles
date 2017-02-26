@@ -67,6 +67,11 @@ in
     
     gnupg1compat
 
+    # Tools for virtualisation
+    qemu
+    virtinst
+    virt-viewer
+
     firefox
     vimb
     
