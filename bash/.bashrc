@@ -3,6 +3,8 @@
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
+else
+	PS1='[\u@\h \W]\$ '
 fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
@@ -12,6 +14,7 @@ fi
 alias ls='ls --color'
 
 # Alias top to htop
+alias htop='TERM=xterm htop'
 alias top='htop'
 
 # Make emacs connect to emacs daemon
@@ -19,6 +22,8 @@ alias emacs='emacsclient -c'
 
 # Use virsh-sys to refer to system qemu:/// setup
 alias virsh-sys='virsh -c qemu:///system'
+alias vkill='virsh -c qemu:///system destroy'
+alias vstart='virsh -c qemu:///system start'
 
 # Add stack auto-completion
 eval "$(stack --bash-completion-script stack)"
