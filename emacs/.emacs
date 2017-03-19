@@ -219,7 +219,25 @@
 
 ;; MAGIT :: Magit is a wrapper for git
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config
+  (magit-define-popup-action 'magit-push-popup
+    ?a
+    "push current branch to all remotes"
+    'magit-custom-push-current-all-remotes ; Defined below
+    ?e))
+
+;; Define a utility function to push a branch to all remotes
+(defun magit-custom-push-current-all-remotes (args)
+  "Push the current branch to all remotes for the git repository."
+  (interactive
+   (list (magit-push-arguments)))
+  (let* ((branch (magit-get-current-branch))
+	(remotes (magit-list-remotes)))
+    (dolist (remote remotes nil)
+      (let ((target (mapconcat 'identity (list remote branch) "/")))
+	(magit-push-current target args)))))
+
 
 ;; PROJECTILE :: Projectile helps with project management
 (use-package projectile
