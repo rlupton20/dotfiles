@@ -24,6 +24,7 @@ alias emacs='emacsclient -c'
 alias virsh-sys='virsh -c qemu:///system'
 alias vkill='virsh -c qemu:///system destroy'
 alias vstart='virsh -c qemu:///system start'
+alias pushall='git remote | xargs -I{} git push {}'
 
 # Add stack auto-completion
 eval "$(stack --bash-completion-script stack)"

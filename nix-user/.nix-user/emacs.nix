@@ -18,8 +18,8 @@ let
     }); 
 
   base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: [
-        epkgs.use-package
-        epkgs.monokai-theme
+  epkgs.use-package
+  epkgs.monokai-theme
 	epkgs.smartparens
 	epkgs.linum-relative
 

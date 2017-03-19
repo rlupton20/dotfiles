@@ -28,9 +28,6 @@ let
   elm-reactor = elmPackages.elm-reactor;
   elm-make = elmPackages.elm-make;
   elm-package = elmPackages.elm-package;
-#  elm-oracle = elmPackages.elm-oracle;
-#  elm-format = elmPackages.elm-format;
-#  elm-test = elmPackages.elm-test;
 
   powerline = unstable.python35Packages.powerline;
 in
@@ -65,9 +62,6 @@ in
     elm-reactor
     elm-make
     elm-package
-#    elm-oracle
-#    elm-format
-#    elm-test
     
     weechat
     
