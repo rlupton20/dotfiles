@@ -6,10 +6,9 @@ with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
 let
   unstable = import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
+  obelisk = import (builtins.fetchTarball https://github.com/rlupton20/alt-nixpkgs/archive/master.tar.gz) {};
 
   yeganesh = haskellPackages.yeganesh;
-
-  stgit = gitAndTools.stgit;
 
   idris = haskellPackages.idris;
 
@@ -29,51 +28,65 @@ let
   elm-make = elmPackages.elm-make;
   elm-package = elmPackages.elm-package;
 
+  cargo = unstable.cargo;
+  rustc = unstable.rustc;
+
   powerline = unstable.python35Packages.powerline;
+
+  base = {
+    inherit
+      stdenv
+      gcc
+      ack
+      global
+    
+      ranger
+      zathura
+      htop
+      yeganesh
+      tmux
+      powerline
+      xmodmap
+      gnupg1compat
+
+      custom-vim
+      custom-emacs;
+  };
+
+  haskellTools = {
+    inherit
+      ghc
+      stack;
+  };
+
+  rustTools = {
+    inherit
+      rustc
+      cargo
+      rustfmt
+      rustracer;
+  };
+
+  elmTools = {
+    inherit
+      elm-repl
+      elm-reactor
+      elm-make
+      elm-package;
+  };
+
+  others = {
+    inherit
+      idris
+
+      weechat
+
+      firefox
+      vimb
+      gtypist;
+  };
+
 in
-{
-  inherit
-    stdenv
-    gcc
-    ack
-    global
-    
-    ranger
-    zathura
-    htop
-    yeganesh
-    tmux
-    powerline
 
-    custom-vim
-    custom-emacs
+(base // haskellTools // rustTools // elmTools // others)
 
-    ghc
-    stack
-
-    idris
-
-    rustc
-    cargo
-    rustfmt
-    rustracer
-
-    elm-repl
-    elm-reactor
-    elm-make
-    elm-package
-    
-    weechat
-    
-    gnupg1compat
-
-    # Tools for virtualisation
-    qemu
-    virtinst
-    virt-viewer
-
-    firefox
-    vimb
-    
-    xmodmap
-    gtypist; }
