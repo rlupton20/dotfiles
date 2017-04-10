@@ -317,13 +317,15 @@
   :config (add-cabal-path)
   (add-stack-path)
   (custom-set-variables '(haskell-tags-on-save t))
+  (add-hook 'haskell-mode-hook 'smartparens-mode)
   (add-hook 'haskell-mode-hook 'subword-mode))
 
 (use-package intero
   :ensure t
   :after haskell-mode
   :config
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  (add-hook 'haskell-mode-hook 'intero-mode)
+  (add-hook 'haskell-mode-hook (lambda () (setq show-trailing-whitespace t))))
 
 
 ;; PYTHON :: elpy for editing Python
@@ -403,7 +405,10 @@
    "V" 'global-hl-line-mode
    "x" 'helm-M-x
    "f" 'helm-find-files
-   "p" 'helm-projectile-find-file
+   "jf" 'helm-projectile-find-file
+   "js" 'helm-projectile-switch-project
+   "jg" 'helm-projectile-grep
+   "p" 'helm-show-kill-ring
    "g" 'magit-status))
 
 
