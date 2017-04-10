@@ -53,6 +53,7 @@
 ;; LINUM RELATIVE MODE :: use relative line numbering
 (use-package linum-relative
   :ensure t
+  :diminish linum-relative-mode
   :config (linum-relative-global-mode))
 
 ;; THEME :: Load the monokai theme
@@ -67,6 +68,7 @@
 ;; untidiness in code. Add it automatically to programming modes.
 (use-package whitespace
   :ensure t
+  :diminish whitespace-mode
   :config
   (setq whitespace-style '(face tabs lines big-indent))
   (set-face-attribute 'whitespace-line nil
@@ -76,6 +78,7 @@
 
 (use-package smartparens
   :ensure t
+  :diminish smartparens-mode
   :config
   (set-face-attribute 'sp-pair-overlay-face nil
 		      :background "#404040"))
@@ -83,6 +86,7 @@
 ;; Elisp :: Setup for editing emacs lisp
 (use-package hl-sexp
   :ensure t
+  :diminish hl-sexp-mod
   :config
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#303030")
@@ -397,8 +401,14 @@
   (setq powerline-default-separator 'arrow))
 
 
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode)
+
+
 (use-package evil-leader
   :ensure t
+  :diminish evil-leader-mode
   :config (global-evil-leader-mode)
    (evil-leader/set-leader ",")
    (evil-leader/set-key
@@ -415,6 +425,7 @@
 ;; Allow evil mode to be used if preferred
 (use-package evil
   :ensure t
+  :diminish evil-mode
   :config (evil-mode t))
 
 ;; Fix keymaps
