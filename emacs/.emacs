@@ -415,10 +415,10 @@
    "V" 'global-hl-line-mode
    "x" 'helm-M-x
    "f" 'helm-find-files
-   "jf" 'helm-projectile-find-file
-   "js" 'helm-projectile-switch-project
-   "jg" 'helm-projectile-grep
-   "p" 'helm-show-kill-ring
+   "pf" 'helm-projectile-find-file
+   "ps" 'helm-projectile-switch-project
+   "pg" 'helm-projectile-grep
+   "k" 'helm-show-kill-ring
    "g" 'magit-status))
 
 
