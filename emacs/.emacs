@@ -34,8 +34,8 @@
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
 
-(global-hl-line-mode)
-(set-face-background 'hl-line "#202020")
+;(global-hl-line-mode)
+;(set-face-background 'hl-line "#202020")
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -50,19 +50,44 @@
 (put 'narrow-to-region 'disabled nil)
 
 
-;; LINUM RELATIVE MODE :: use relative line numbering
-(use-package linum-relative
+;; LINE NUMBERING:: use nlinum for line numbering
+(use-package nlinum
   :ensure t
-  :diminish linum-relative-mode
-  :config (linum-relative-global-mode))
+  :diminish nlinum-mode)
+
+(use-package nlinum-relative
+  :ensure t
+  :pin melpa
+  :diminish nlinum-relative-mode
+  :after evil
+  :config
+  (nlinum-relative-setup-evil)
+  (setq nlinum-relative-redisplay-delay 0)
+  (setq nlinum-relative-current-symbol "0")
+  (global-nlinum-relative-mode))
 
 ;; THEME :: Load the monokai theme
-(use-package monokai-theme
+;(use-package monokai-theme
+;  :ensure t
+;  :config
+;  (setq monokai-background "#101010")
+;  (setq monokai-highlight-line "#202020")
+;  (load-theme 'monokai t))
+
+(use-package doom-themes
   :ensure t
   :config
-  (setq monokai-background "#101010")
-  (setq monokai-highlight-line "#000000")
-  (load-theme 'monokai t))
+  (setq doom-enable-bold t
+	doom-enable-italic t)
+  (load-theme 'doom-molokai t)
+  (require 'doom-nlinum)
+  (custom-set-faces
+   '(nlinum-relative-current-face ((t (:inherit doom-nlinum-highlight))))))
+
+;; ICONS :: Nicer icons
+(use-package all-the-icons
+  :ensure t)
+
 
 ;; WHITESPACE MODE :: Configure whitespace mode to show potential
 ;; untidiness in code. Add it automatically to programming modes.
@@ -70,7 +95,7 @@
   :ensure t
   :diminish whitespace-mode
   :config
-  (setq whitespace-style '(face tabs lines big-indent))
+  (setq whitespace-style '(face tabs lines))
   (set-face-attribute 'whitespace-line nil
 		      :background "#2B1609"
 		      :foreground 'unspecified)
@@ -400,6 +425,13 @@
   (setq powerline-height 25)
   (setq powerline-default-separator 'arrow))
 
+;;; SPACELINE ICONS :: use icons in spaceline
+(use-package spaceline-all-the-icons
+  :ensure t
+  :pin melpa
+  :after spaceline
+  :config (spaceline-all-the-icons-theme))
+
 
 (use-package undo-tree
   :ensure t
@@ -418,6 +450,7 @@
    "pf" 'helm-projectile-find-file
    "ps" 'helm-projectile-switch-project
    "pg" 'helm-projectile-grep
+   "j"  'avy-goto-char
    "k" 'helm-show-kill-ring
    "g" 'magit-status))
 
