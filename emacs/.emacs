@@ -108,7 +108,7 @@
   (set-face-attribute 'sp-pair-overlay-face nil
 		      :background "#404040"))
 
-;; Elisp :: Setup for editing emacs lisp
+;; ELISP :: Setup for editing emacs lisp
 (use-package hl-sexp
   :ensure t
   :diminish hl-sexp-mod
@@ -128,6 +128,7 @@
   :config
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
+
 ;; HELM :: Use helm in places where it is useful
 (use-package helm
   :ensure t
@@ -140,6 +141,11 @@
           ;; Finding files can also be a pain, so use helm
           ;; to locate and open files
           ("C-x C-f" . helm-find-files)))
+
+(use-package helm-swoop
+  :ensure t
+  :after helm)
+
 
 ;; GIT GUTTER :: Display change indicators in margin
 (use-package git-gutter
@@ -438,6 +444,8 @@
   :diminish undo-tree-mode)
 
 
+;; EVIL :: (emulated) vim text control
+;; EVIL LEADER :: leader key for commands
 (use-package evil-leader
   :ensure t
   :diminish evil-leader-mode
@@ -449,13 +457,27 @@
    "f" 'helm-find-files
    "pf" 'helm-projectile-find-file
    "ps" 'helm-projectile-switch-project
+   "pb" 'helm-projectile-switch-to-buffer ; For uniformity
+   "b"  'helm-projectile-switch-to-buffer
    "pg" 'helm-projectile-grep
-   "j"  'avy-goto-char
+   "s"  'helm-swoop
+   ","  'avy-goto-char
    "k" 'helm-show-kill-ring
    "g" 'magit-status))
 
+;; EVIL SURROUND :: surround text objects
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
-;; Allow evil mode to be used if preferred
+;; EVIL SMARTPARENS :: do what you mean in smartparens mode
+(use-package evil-smartparens
+  :ensure t
+  :config
+  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
+
+;; EVIL :: Enable evil mode
 (use-package evil
   :ensure t
   :diminish evil-mode
