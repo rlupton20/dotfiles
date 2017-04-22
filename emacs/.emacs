@@ -34,8 +34,8 @@
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
 
-(global-hl-line-mode)
-(set-face-background 'hl-line "#202020")
+;(global-hl-line-mode)
+;(set-face-background 'hl-line "#202020")
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -50,25 +50,52 @@
 (put 'narrow-to-region 'disabled nil)
 
 
-;; LINUM RELATIVE MODE :: use relative line numbering
-(use-package linum-relative
+;; LINE NUMBERING:: use nlinum for line numbering
+(use-package nlinum
   :ensure t
-  :config (linum-relative-global-mode))
+  :diminish nlinum-mode)
+
+(use-package nlinum-relative
+  :ensure t
+  :pin melpa
+  :diminish nlinum-relative-mode
+  :after evil
+  :config
+  (nlinum-relative-setup-evil)
+  (setq nlinum-relative-redisplay-delay 0)
+  (setq nlinum-relative-current-symbol "0")
+  (global-nlinum-relative-mode))
 
 ;; THEME :: Load the monokai theme
-(use-package monokai-theme
+;(use-package monokai-theme
+;  :ensure t
+;  :config
+;  (setq monokai-background "#101010")
+;  (setq monokai-highlight-line "#202020")
+;  (load-theme 'monokai t))
+
+(use-package doom-themes
   :ensure t
   :config
-  (setq monokai-background "#101010")
-  (setq monokai-highlight-line "#000000")
-  (load-theme 'monokai t))
+  (setq doom-enable-bold t
+	doom-enable-italic t)
+  (load-theme 'doom-molokai t)
+  (require 'doom-nlinum)
+  (custom-set-faces
+   '(nlinum-relative-current-face ((t (:inherit doom-nlinum-highlight))))))
+
+;; ICONS :: Nicer icons
+(use-package all-the-icons
+  :ensure t)
+
 
 ;; WHITESPACE MODE :: Configure whitespace mode to show potential
 ;; untidiness in code. Add it automatically to programming modes.
 (use-package whitespace
   :ensure t
+  :diminish whitespace-mode
   :config
-  (setq whitespace-style '(face tabs lines big-indent))
+  (setq whitespace-style '(face tabs lines))
   (set-face-attribute 'whitespace-line nil
 		      :background "#2B1609"
 		      :foreground 'unspecified)
@@ -76,6 +103,7 @@
 
 (use-package smartparens
   :ensure t
+  :diminish smartparens-mode
   :config
   (set-face-attribute 'sp-pair-overlay-face nil
 		      :background "#404040"))
@@ -83,6 +111,7 @@
 ;; Elisp :: Setup for editing emacs lisp
 (use-package hl-sexp
   :ensure t
+  :diminish hl-sexp-mod
   :config
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#303030")
@@ -317,13 +346,15 @@
   :config (add-cabal-path)
   (add-stack-path)
   (custom-set-variables '(haskell-tags-on-save t))
+  (add-hook 'haskell-mode-hook 'smartparens-mode)
   (add-hook 'haskell-mode-hook 'subword-mode))
 
 (use-package intero
   :ensure t
   :after haskell-mode
   :config
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  (add-hook 'haskell-mode-hook 'intero-mode)
+  (add-hook 'haskell-mode-hook (lambda () (setq show-trailing-whitespace t))))
 
 
 ;; PYTHON :: elpy for editing Python
@@ -394,22 +425,40 @@
   (setq powerline-height 25)
   (setq powerline-default-separator 'arrow))
 
+;;; SPACELINE ICONS :: use icons in spaceline
+(use-package spaceline-all-the-icons
+  :ensure t
+  :pin melpa
+  :after spaceline
+  :config (spaceline-all-the-icons-theme))
+
+
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode)
+
 
 (use-package evil-leader
   :ensure t
+  :diminish evil-leader-mode
   :config (global-evil-leader-mode)
    (evil-leader/set-leader ",")
    (evil-leader/set-key
    "V" 'global-hl-line-mode
    "x" 'helm-M-x
    "f" 'helm-find-files
-   "p" 'helm-projectile-find-file
+   "pf" 'helm-projectile-find-file
+   "ps" 'helm-projectile-switch-project
+   "pg" 'helm-projectile-grep
+   "j"  'avy-goto-char
+   "k" 'helm-show-kill-ring
    "g" 'magit-status))
 
 
 ;; Allow evil mode to be used if preferred
 (use-package evil
   :ensure t
+  :diminish evil-mode
   :config (evil-mode t))
 
 ;; Fix keymaps
