@@ -326,6 +326,10 @@
   :ensure t
   :mode ("\\.yaml$" . yaml-mode))
 
+;; MARKDOWN :: markdown mode
+(use-package markdown-mode
+  :ensure t)
+
 ;; EMAMUX :: control tmux sessions from emacs
 (use-package emamux
   :ensure t)
@@ -476,6 +480,18 @@
   :ensure t
   :config
   (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
+
+;; EVIL EASYMOTION :: ace jump mode with evil
+(use-package evil-easymotion
+  :ensure t
+  :config
+  (evilem-default-keybindings "SPC"))
+
+;; EVIL COMMENTARY :: comment out lines in evil
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode))
 
 ;; EVIL :: Enable evil mode
 (use-package evil
