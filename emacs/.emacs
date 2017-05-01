@@ -510,5 +510,11 @@
 (use-package sicp
   :ensure t)
 
+
+;; LOCAL CUSTOMIZATIONS :: Custom local configuration (if it exists)
+(let ((local-file "~/.emacs-local"))
+  (if (file-exists-p local-file)
+      (load-file local-file)))
+
 (provide '.emacs)
 ;;; .emacs ends here
