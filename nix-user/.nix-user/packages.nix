@@ -44,6 +44,7 @@ let
       zathura
       htop
       yeganesh
+      rofi
       tmux
       powerline
       xmodmap
