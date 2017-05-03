@@ -10,6 +10,9 @@ fi
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
+# Save history from multiple terminals
+PROMPT_COMMAND='history -a'
+
 # An ls alias so we have colour
 alias ls='ls --color'
 

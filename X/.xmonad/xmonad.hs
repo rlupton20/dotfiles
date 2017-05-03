@@ -44,7 +44,6 @@ main = do
     defaultLayouts = (avoidStruts $ smartBorders $ layoutHook def) ||| (noBorders Full)
 
     insertkeys :: XConfig l -> [((KeyMask,KeySym), X ())]
-    insertkeys _ = [ ((defaultMask, xK_p), spawn "dmenu_run") --"$(yeganesh -x -- -h 30 -y 400 -nb '#303030' -nf '#505050' -sb '#0099FF' -sf '#303030' -fn 'LiberationMono-10:bold')")
+    insertkeys _ = [ ((defaultMask, xK_p), spawn "rofi -show drun")
                    , ((defaultMask, xK_s), spawn "i3lock && xset dpms force off")
-                   , ((hyper, xK_space), spawn toggleMouse)
-                   , ((defaultMask, xK_t), spawn "tmux-launcher") ]
+                   , ((hyper, xK_space), spawn toggleMouse) ]
