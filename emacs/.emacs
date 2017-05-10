@@ -307,6 +307,11 @@
 (use-package multiple-cursors
   :ensure t)
 
+;; MOVE-TEXT :: move-text allows blocks of text to be dragged
+;; around. These are bound later in evil-visual-mode
+(use-package move-text
+  :ensure t)
+
 
 ;;; Now we configure packages for individual editing modes.
 
@@ -411,6 +416,11 @@
   :config
   (add-to-list 'company-backends 'company-elm))
 
+
+;;; IO :: mode for editing Io
+(use-package io-mode
+  :ensure t)
+
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
@@ -503,6 +513,10 @@
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-insert-state-map (kbd "C-j") 'sp-up-sexp)
+
+;; Keybindings for move-text
+(define-key evil-visual-state-map (kbd "C-j") 'move-text-down)
+(define-key evil-visual-state-map (kbd "C-k") 'move-text-up)
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
 
