@@ -421,6 +421,11 @@
 (use-package io-mode
   :ensure t)
 
+;;; Scala :: mode for editing scala, with ENSIME integration
+(use-package ensime
+  :ensure t
+  :pin melpa-stable)
+
 ;;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
