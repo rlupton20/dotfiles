@@ -89,10 +89,6 @@ let
       elm-package;
   };
 
-  scalaTools = {
-    inherit
-      sbt;
-
   jsTools = {
     inherit
       nodejs

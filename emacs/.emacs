@@ -487,12 +487,12 @@
 ;;; TypeScript :: editing mode for TypeScript
 (use-package tide
   :ensure t
-  :config (tide-setup)
+  :config
   (eldoc-mode t)
   (tide-hl-identifier-mode t)
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook 'tide-mode)
-  (setq-default typescript-indent-level 2))
+  (add-hook 'typescript-mode-hook 'tide-setup))
 
 
 ;;; SPACELINE :: Use spaceline for an emacs powerline
