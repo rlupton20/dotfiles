@@ -428,7 +428,10 @@
 
 ;;; Clojure :: mode for editing clojure
 (use-package clojure-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
+  (add-hook 'clojure-mode-hook 'hl-sexp-mode))
 
 (use-package cider
   :ensure t)
