@@ -426,7 +426,7 @@
   (add-hook 'flycheck-mode-hook #'flycheck-elm-setup))
 
 
-;;; SCALA :: editing modes for working in scala
+;;; SCALA :: mode for editing scala, with ENSIME integration
 (use-package sbt-mode
   :ensure t)
 
@@ -434,16 +434,6 @@
   :ensure t
   :pin melpa-stable)
 
-
-
-;;; IO :: mode for editing Io
-(use-package io-mode
-  :ensure t)
-
-;;; Scala :: mode for editing scala, with ENSIME integration
-(use-package ensime
-  :ensure t
-  :pin melpa-stable)
 
 ;;; Clojure :: mode for editing clojure
 (use-package clojure-mode
@@ -453,6 +443,11 @@
   (add-hook 'clojure-mode-hook 'hl-sexp-mode))
 
 (use-package cider
+  :ensure t)
+
+
+;;; IO :: mode for editing Io
+(use-package io-mode
   :ensure t)
 
 ;; R :: editing modes and configuration for R
