@@ -245,7 +245,8 @@
   :config
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 1))
+  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t))
 
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
@@ -413,8 +414,26 @@
 ;;; ELM :: editing modes and configuration for elm
 (use-package elm-mode
   :ensure t
+  :after company
   :config
-  (add-to-list 'company-backends 'company-elm))
+  (add-to-list 'company-backends 'company-elm)
+  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
+
+(use-package flycheck-elm
+  :ensure t
+  :after flycheck
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-elm-setup))
+
+
+;;; SCALA :: editing modes for working in scala
+(use-package sbt-mode
+  :ensure t)
+
+(use-package ensime
+  :ensure t
+  :pin melpa-stable)
+
 
 
 ;;; IO :: mode for editing Io
@@ -443,12 +462,37 @@
 
 ;;; JavaScript :: editing mode and extensions for JavaScript
 (use-package js3-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq-default js3-indent-level 4)
+  (setq-default flycheck-disabled-checkers
+		(append flycheck-disabled-checkers
+			'(javascript-jshint)))
+  (flycheck-add-mode 'javascript-eslint 'js3-mode)
+  (add-hook 'js3-mode 'smart-parens-mode))
+
+;; use tern to provide backend function
+(use-package tern
+  :ensure t
+  :config
+  (add-hook 'js3-mode-hook (lambda () (tern-mode t))))
+
+(use-package company-tern
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-tern)
+  (add-hook 'js3-mode-hook 'company-mode))
 
 
 ;;; TypeScript :: editing mode for TypeScript
 (use-package tide
-  :ensure t)
+  :ensure t
+  :config (tide-setup)
+  (eldoc-mode t)
+  (tide-hl-identifier-mode t)
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook 'tide-mode)
+  (setq-default typescript-indent-level 2))
 
 
 ;;; SPACELINE :: Use spaceline for an emacs powerline

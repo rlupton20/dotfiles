@@ -30,6 +30,12 @@ let
   cargo = unstable.cargo;
   rustc = unstable.rustc;
 
+  nodejs = unstable.nodejs;
+  eslint = unstable.nodePackages.eslint;
+  tern = unstable.nodePackages.tern;
+
+  terraform = unstable.terraform;
+
   powerline = python35Packages.powerline;
 
   base = {
@@ -69,6 +75,12 @@ let
       rustracer;
   };
 
+  scalaTools = {
+    inherit
+      scala
+      sbt;
+  };
+
   elmTools = {
     inherit
       elm-repl
@@ -80,6 +92,19 @@ let
   scalaTools = {
     inherit
       sbt;
+
+  jsTools = {
+    inherit
+      nodejs
+      tern
+      eslint;
+  };
+
+  opsTools = {
+    inherit
+      virtinst
+      virt-viewer
+      terraform;
   };
 
   others = {
@@ -96,5 +121,5 @@ let
 
 in
 
-(base // haskellTools // rustTools // elmTools // scalaTools // others)
+(base // haskellTools // rustTools // scalaTools // elmTools // jsTools // opsTools // others)
 
