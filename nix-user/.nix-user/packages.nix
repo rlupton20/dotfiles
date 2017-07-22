@@ -15,30 +15,31 @@ let
   gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
 
   ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
-      happy
       hindent
       hasktags
       stylish-haskell
-      ghc-mod
       hlint
     ]);
 
-  elm-repl = elmPackages.elm-repl;
-  elm-reactor = elmPackages.elm-reactor;
-  elm-make = elmPackages.elm-make;
-  elm-package = elmPackages.elm-package;
+
+  elm-repl = unstable.elmPackages.elm-repl;
+  elm-reactor = unstable.elmPackages.elm-reactor;
+  elm-make = unstable.elmPackages.elm-make;
+  elm-package = unstable.elmPackages.elm-package;
 
   cargo = unstable.cargo;
   rustc = unstable.rustc;
 
-  powerline = unstable.python35Packages.powerline;
+  powerline = python35Packages.powerline;
 
   base = {
     inherit
       stdenv
       gcc
       ack
+      ag
       global
+      fzf
     
       ranger
       zathura
@@ -76,18 +77,24 @@ let
       elm-package;
   };
 
+  scalaTools = {
+    inherit
+      sbt;
+  };
+
   others = {
     inherit
       idris
+      rxvt_unicode
 
       weechat
 
       firefox
-      vimb
+      qutebrowser
       gtypist;
   };
 
 in
 
-(base // haskellTools // rustTools // elmTools // others)
+(base // haskellTools // rustTools // elmTools // scalaTools // others)
 
