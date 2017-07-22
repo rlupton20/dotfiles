@@ -433,7 +433,7 @@
 (use-package cider
   :ensure t)
 
-;;; R :: editing modes and configuration for R
+;; R :: editing modes and configuration for R
 (use-package ess
   :ensure t)
 
@@ -544,18 +544,3 @@
 
 (provide '.emacs)
 ;;; .emacs ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(haskell-tags-on-save t)
- '(package-selected-packages
-   (quote
-    (cider cider-mode clojure-mode ensime yaml-mode use-package tide spaceline-all-the-icons sicp racer nlinum-relative nixos-options nix-sandbox nix-mode multiple-cursors move-text monokai-theme markdown-mode magit linum-relative js3-mode io-mode intero hl-sexp helm-swoop helm-projectile git-gutter flycheck-rust evil-surround evil-smartparens evil-leader evil-easymotion evil-commentary ess emamux elpy elm-mode doom-themes cargo))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(nlinum-relative-current-face ((t (:inherit doom-nlinum-highlight)))))
