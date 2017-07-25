@@ -81,6 +81,11 @@ let
       sbt;
   };
 
+  clojureTools = {
+    inherit
+      leiningen;
+  };
+
   elmTools = {
     inherit
       elm-repl
@@ -126,5 +131,5 @@ let
 
 in
 
-(base // haskellTools // rustTools // scalaTools // elmTools // jsTools // opsTools // xmonadSupport // others)
+(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // others)
 
