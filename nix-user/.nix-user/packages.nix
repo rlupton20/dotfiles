@@ -103,10 +103,19 @@ let
       terraform;
   };
 
+  xmonadSupport = {
+    inherit
+      rxvt_unicode
+      maim
+      slop
+      xclip
+      xinput
+      i3lock;
+  };
+
   others = {
     inherit
       idris
-      rxvt_unicode
 
       weechat
 
@@ -117,5 +126,5 @@ let
 
 in
 
-(base // haskellTools // rustTools // scalaTools // elmTools // jsTools // opsTools // others)
+(base // haskellTools // rustTools // scalaTools // elmTools // jsTools // opsTools // xmonadSupport // others)
 

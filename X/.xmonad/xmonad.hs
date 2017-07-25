@@ -13,8 +13,10 @@ import Data.Default
 
 -- The main xmonad modifier key is set here
 defaultMask = mod4Mask
--- We use hyper for some commands also
+-- We use other modifiers sometimes too
 hyper = mod3Mask
+control = controlMask
+terminalCmd = "urxvt -tr -sh 25"
 
 toggleMouse :: String
 toggleMouse = "xinput --list-props 11 | awk '/Device Enabled/ {toggle = 1 - $4; print toggle}' | xargs xinput set-int-prop 11 \"Device Enabled\" 8"
@@ -25,7 +27,7 @@ main = do
   _ <- spawn "feh --bg-scale ~/.Wallpaper"
   xmonad $ customConfig xmproc
   where
-    customConfig xmproc = def { terminal = "urxvt -tr -sh 25"
+    customConfig xmproc = def { terminal = terminalCmd
                               , manageHook = manageDocks <+> manageHook def
                               , layoutHook = defaultLayouts
                               , handleEventHook = docksEventHook <+> handleEventHook def
@@ -46,4 +48,9 @@ main = do
     insertkeys :: XConfig l -> [((KeyMask,KeySym), X ())]
     insertkeys _ = [ ((defaultMask, xK_p), spawn "rofi -show drun")
                    , ((defaultMask, xK_s), spawn "i3lock && xset dpms force off")
+                   , ((noModMask, xK_Print), spawn "maim -s -c 1,0,0,0.6 --format png /dev/stdout | tee ~/.screenshots/$(date +%F-%T).png | xclip -selection clipboard -t image/png -i")
+                   , ((defaultMask, xK_Print), spawn "maim --format png /dev/stdout | tee ~/.screenshots/$(date +%F-%T).png | xclip -selection clipboard -t image/png -i")
+                   , ((shiftMask, xK_Print), spawn "ls ~/.screenshots | sort -r | rofi -dmenu | xargs -I{} rifle ~/.screenshots/{}")
                    , ((hyper, xK_space), spawn toggleMouse) ]
+
+launchInTerminal cmd = terminalCmd ++ " -e " ++ cmd
