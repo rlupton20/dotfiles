@@ -49,7 +49,7 @@ main = do
     insertkeys _ = [ ((defaultMask, xK_p), spawn "rofi -show drun")
                    , ((defaultMask, xK_s), spawn "i3lock && xset dpms force off")
                    , ((noModMask, xK_Print), spawn "maim -s -c 1,0,0,0.6 --format png /dev/stdout | tee ~/.screenshots/$(date +%F-%T).png | xclip -selection clipboard -t image/png -i")
-                   , ((defaultMask, xK_Print), spawn "maim --format png /dev/stdout | tee ~/.screenshots/$(date +%F-%T).png | xclip -selection clipboard -t image/png -i")
+                   , ((defaultMask, xK_Print), spawn "~/scripts/super-screenshot.sh")
                    , ((shiftMask, xK_Print), spawn "ls ~/.screenshots | sort -r | rofi -dmenu | xargs -I{} rifle ~/.screenshots/{}")
                    , ((hyper, xK_space), spawn toggleMouse) ]
 
