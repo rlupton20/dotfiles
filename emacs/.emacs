@@ -66,14 +66,6 @@
   (setq nlinum-relative-current-symbol "0")
   (global-nlinum-relative-mode))
 
-;; THEME :: Load the monokai theme
-;(use-package monokai-theme
-;  :ensure t
-;  :config
-;  (setq monokai-background "#101010")
-;  (setq monokai-highlight-line "#202020")
-;  (load-theme 'monokai t))
-
 (use-package doom-themes
   :ensure t
   :config
@@ -308,9 +300,8 @@
 (use-package multiple-cursors
   :ensure t)
 
-;; MOVE-TEXT :: move-text allows blocks of text to be dragged
-;; around. These are bound later in evil-visual-mode
-(use-package move-text
+;; HYDRA :: library for creating magit-like keyboard driven menus
+(use-package hydra
   :ensure t)
 
 
@@ -359,6 +350,7 @@
 
 (use-package haskell-mode
   :ensure t
+  :defer
   :config (add-cabal-path)
   (add-stack-path)
   (custom-set-variables '(haskell-tags-on-save t))
@@ -368,14 +360,15 @@
 (use-package intero
   :ensure t
   :after haskell-mode
+  :defer
   :config
   (add-hook 'haskell-mode-hook 'intero-mode)
   (add-hook 'haskell-mode-hook (lambda () (setq show-trailing-whitespace t))))
 
-
 ;; PYTHON :: elpy for editing Python
 (use-package elpy
   :ensure t
+  :defer
   :config
   (elpy-enable))
 
@@ -383,6 +376,7 @@
 ;; RUST :: emacs configuration for editing rust
 (use-package rust-mode
   :ensure t
+  :defer
   :config
   (add-hook 'rust-mode-hook
 	    (lambda ()
@@ -391,12 +385,14 @@
 (use-package cargo
   :ensure t
   :after rust-mode
+  :defer
   :config
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 (use-package racer
   :ensure t
   :after rust-mode
+  :defer
   :config
   (setq racer-cmd "racer")
   (setq racer-rust-src-path "~/.rust/src")
@@ -415,6 +411,7 @@
 (use-package elm-mode
   :ensure t
   :after company
+  :defer
   :config
   (add-to-list 'company-backends 'company-elm)
   (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
@@ -428,36 +425,43 @@
 
 ;;; SCALA :: mode for editing scala, with ENSIME integration
 (use-package sbt-mode
-  :ensure t)
+  :ensure t
+  :defer)
 
 (use-package ensime
   :ensure t
+  :defer
   :pin melpa-stable)
 
 
 ;;; Clojure :: mode for editing clojure
 (use-package clojure-mode
   :ensure t
+  :defer
   :config
   (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
   (add-hook 'clojure-mode-hook 'hl-sexp-mode))
 
 (use-package cider
+  :defer
   :ensure t)
 
 
 ;;; IO :: mode for editing Io
 (use-package io-mode
+  :defer
   :ensure t)
 
 ;; R :: editing modes and configuration for R
 (use-package ess
+  :defer
   :ensure t)
 
 
 ;;; JavaScript :: editing mode and extensions for JavaScript
 (use-package js3-mode
   :ensure t
+  :defer
   :config
   (setq-default js3-indent-level 4)
   (setq-default flycheck-disabled-checkers
@@ -469,11 +473,13 @@
 ;; use tern to provide backend function
 (use-package tern
   :ensure t
+  :defer
   :config
   (add-hook 'js3-mode-hook (lambda () (tern-mode t))))
 
 (use-package company-tern
   :ensure t
+  :defer
   :config
   (add-to-list 'company-backends 'company-tern)
   (add-hook 'js3-mode-hook 'company-mode))
@@ -482,6 +488,7 @@
 ;;; TypeScript :: editing mode for TypeScript
 (use-package tide
   :ensure t
+  :defer
   :config
   (eldoc-mode t)
   (tide-hl-identifier-mode t)
@@ -567,10 +574,29 @@
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-insert-state-map (kbd "C-j") 'sp-up-sexp)
+;; M-. is often used for jump to definition, which is useful in normal mode
+(define-key evil-normal-state-map (kbd "M-.") nil)
 
 ;; Keybindings for move-text
 (define-key evil-visual-state-map (kbd "C-j") 'move-text-down)
 (define-key evil-visual-state-map (kbd "C-k") 'move-text-up)
+
+
+;; HYDRAS :: Hydras for controlling emacs
+(defhydra hydra-window-manager-menu (:hint nil)
+  "Window management"
+  ("-" split-vertical-to-next-buffer "vertical split")
+  ("\\" split-horizontal-to-next-buffer "horizontal split")
+  ("f" delete-other-windows "focus")
+  ("d" delete-window "delete")
+  ("h" evil-window-left "left")
+  ("j" evil-window-down "down")
+  ("k" evil-window-up "up")
+  ("l" evil-window-right "right")
+  ("b" helm-buffers-list "switch buffer"))
+
+(evil-leader/set-key
+  "wh" 'hydra-window-manager-menu/body)
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
 
