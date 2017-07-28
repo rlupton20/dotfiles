@@ -71,10 +71,7 @@
   :config
   (setq doom-enable-bold t
 	doom-enable-italic t)
-  (load-theme 'doom-molokai t)
-  (require 'doom-nlinum)
-  (custom-set-faces
-   '(nlinum-relative-current-face ((t (:inherit doom-nlinum-highlight))))))
+  (load-theme 'doom-molokai t))
 
 ;; ICONS :: Nicer icons
 (use-package all-the-icons
@@ -89,7 +86,7 @@
   :config
   (setq whitespace-style '(face tabs lines))
   (set-face-attribute 'whitespace-line nil
-		      :background "#2B1609"
+		      :background (doom-color (quote base3))
 		      :foreground 'unspecified)
   (add-hook 'prog-mode-hook 'whitespace-mode))
 
@@ -98,7 +95,8 @@
   :diminish smartparens-mode
   :config
   (set-face-attribute 'sp-pair-overlay-face nil
-		      :background "#404040"))
+		      :foreground (doom-color (quote bg))
+		      :background (doom-color (quote base5))))
 
 ;; ELISP :: Setup for editing emacs lisp
 (use-package hl-sexp
@@ -106,7 +104,7 @@
   :diminish hl-sexp-mod
   :config
   (set-face-attribute 'hl-sexp-face nil
-		      :background "#303030")
+		      :background (doom-color (quote bg-alt)))
   (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode))
 
 ;; Enable smartparens in elisp mode
@@ -500,18 +498,34 @@
 ;;; SPACELINE :: Use spaceline for an emacs powerline
 (use-package spaceline
   :ensure t
-  :config (require 'spaceline-config)
-  (spaceline-spacemacs-theme)
+  :config
+  (require 'spaceline-config)
   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
   (setq powerline-height 25)
-  (setq powerline-default-separator 'arrow))
+  (setq powerline-default-separator 'bar)
+  (spaceline-spacemacs-theme)
+  (spaceline-helm-mode)
+  (set-face-attribute 'spaceline-evil-normal nil
+		      :background (doom-color (quote green)))
+  (set-face-attribute 'spaceline-evil-insert nil
+		      :background (doom-color (quote blue)))
+  (set-face-attribute 'spaceline-evil-visual nil
+		      :background (doom-color (quote fg)))
+  (set-face-attribute 'spaceline-evil-replace nil
+		      :background (doom-color (quote orange)))
+  (set-face-attribute 'spaceline-evil-emacs nil
+		      :background (doom-color (quote cyan)))
+  (set-face-attribute 'spaceline-evil-motion nil
+		      :background (doom-color (quote violet))))
 
-;;; SPACELINE ICONS :: use icons in spaceline
+;; SPACELINE ICONS :: use icons in spaceline
 (use-package spaceline-all-the-icons
   :ensure t
   :pin melpa
   :after spaceline
-  :config (spaceline-all-the-icons-theme))
+  :config
+  (spaceline-all-the-icons-theme)
+  (setq spaceline-all-the-icons-separator-type 'none))
 
 
 (use-package undo-tree
