@@ -34,7 +34,7 @@
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
 
-;(global-hl-line-mode)
+(global-hl-line-mode)
 ;(set-face-background 'hl-line "#202020")
 
 ;;; FIXES :: For things which don't behave quite right
@@ -376,9 +376,7 @@
   :ensure t
   :defer
   :config
-  (add-hook 'rust-mode-hook
-	    (lambda ()
-	      (local-set-key (kbd "C-c <tab>") #'rust-format-buffer))))
+  (setq rust-format-on-save t))
 
 (use-package cargo
   :ensure t
@@ -393,10 +391,11 @@
   :defer
   :config
   (setq racer-cmd "racer")
-  (setq racer-rust-src-path "~/.rust/src")
+  (setq racer-rust-src-path (getenv "RUST_SRC_PATH"))
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   (add-hook 'racer-mode-hook #'company-mode))
+
 
 (use-package flycheck-rust
     :ensure t
@@ -534,25 +533,6 @@
 
 
 ;; EVIL :: (emulated) vim text control
-;; EVIL LEADER :: leader key for commands
-(use-package evil-leader
-  :ensure t
-  :diminish evil-leader-mode
-  :config (global-evil-leader-mode)
-   (evil-leader/set-leader ",")
-   (evil-leader/set-key
-   "V" 'global-hl-line-mode
-   "x" 'helm-M-x
-   "f" 'helm-find-files
-   "pf" 'helm-projectile-find-file
-   "ps" 'helm-projectile-switch-project
-   "pb" 'helm-projectile-switch-to-buffer ; For uniformity
-   "b"  'helm-projectile-switch-to-buffer
-   "pg" 'helm-projectile-grep
-   "s"  'helm-swoop
-   ","  'avy-goto-char
-   "k" 'helm-show-kill-ring
-   "g" 'magit-status))
 
 ;; EVIL SURROUND :: surround text objects
 (use-package evil-surround
@@ -577,6 +557,34 @@
   :ensure t
   :config
   (evil-commentary-mode))
+
+;; EVIL NUMBERS :: Increment/decrement numbers at point
+(use-package evil-numbers
+  :ensure t
+  :config
+  (define-key evil-normal-state-map (kbd "H-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "H-x") 'evil-numbers/dec-at-pt))
+
+
+;; EVIL LEADER :: leader key for commands
+(use-package evil-leader
+  :ensure t
+  :diminish evil-leader-mode
+  :config (global-evil-leader-mode)
+   (evil-leader/set-leader ",")
+   (evil-leader/set-key
+   "V" 'global-hl-line-mode
+   "x" 'helm-M-x
+   "f" 'helm-find-files
+   "pf" 'helm-projectile-find-file
+   "ps" 'helm-projectile-switch-project
+   "pb" 'helm-projectile-switch-to-buffer ; For uniformity
+   "b"  'helm-projectile-switch-to-buffer
+   "pg" 'helm-projectile-grep
+   "s"  'helm-swoop
+   ","  'avy-goto-char
+   "k" 'helm-show-kill-ring
+   "g" 'magit-status))
 
 ;; EVIL :: Enable evil mode
 (use-package evil
