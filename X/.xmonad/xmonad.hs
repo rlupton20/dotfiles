@@ -33,7 +33,7 @@ main = do
                               , handleEventHook = docksEventHook <+> handleEventHook def
                               , startupHook = docksStartupHook <+> startupHook def
                               , logHook = dynamicLogWithPP xmobarPP { ppOutput = hPutStrLn xmproc
-                                                                    , ppTitle = xmobarColor "#69FF24" "" . shorten 50
+                                                                    , ppTitle = xmobarColor "#B6E63E" "" . shorten 50
                                                                     , ppCurrent = (\w -> xmobarColor "#FF6A00" "" $ "[" ++ w ++ "]")
                                                                     , ppHidden  = xmobarColor "#828282" ""
                                                                     , ppSep = xmobarColor "#FF0088" "" " : "
