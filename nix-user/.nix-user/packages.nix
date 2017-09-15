@@ -26,6 +26,7 @@ let
   elm-reactor = unstable.elmPackages.elm-reactor;
   elm-make = unstable.elmPackages.elm-make;
   elm-package = unstable.elmPackages.elm-package;
+  elm-format = unstable.elmPackages.elm-format;
 
   cargo = unstable.cargo;
   rustc = unstable.rustc;
@@ -37,6 +38,8 @@ let
   terraform = unstable.terraform;
 
   powerline = python35Packages.powerline;
+
+  csv = obelisk.miniTools.csv;
 
   base = {
     inherit
@@ -91,7 +94,8 @@ let
       elm-repl
       elm-reactor
       elm-make
-      elm-package;
+      elm-package
+      elm-format;
   };
 
   jsTools = {
@@ -118,6 +122,11 @@ let
       i3lock;
   };
 
+  myTools = {
+    inherit
+      csv;
+  };
+
   others = {
     inherit
       idris
@@ -131,5 +140,5 @@ let
 
 in
 
-(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // others)
+(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // myTools // others)
 
