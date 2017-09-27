@@ -33,9 +33,7 @@
 (scroll-bar-mode -1)  ; Remove the scrollbar
 (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
 (setq show-trailing-whitespace t)
-
 (global-hl-line-mode)
-;(set-face-background 'hl-line "#202020")
 
 ;;; FIXES :: For things which don't behave quite right
 
@@ -241,6 +239,7 @@
 ;; YASNIPPET :: Use Yasnippet everywhere
 (use-package yasnippet
   :ensure t
+  :diminish
   :config (yas-global-mode 1))
 
 ;; MAGIT :: Magit is a wrapper for git
@@ -494,45 +493,36 @@
   (add-hook 'typescript-mode-hook 'tide-setup))
 
 
-;;; SPACELINE :: Use spaceline for an emacs powerline
-(use-package spaceline
+;;; POWERLINE :: vim-like powerline mode line
+(use-package powerline
   :ensure t
   :config
-  (require 'spaceline-config)
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  (setq powerline-height 25)
-  (setq powerline-default-separator 'bar)
-  (spaceline-spacemacs-theme)
-  (spaceline-helm-mode)
-  (set-face-attribute 'spaceline-evil-normal nil
-		      :background (doom-color (quote green)))
-  (set-face-attribute 'spaceline-evil-insert nil
-		      :background (doom-color (quote blue)))
-  (set-face-attribute 'spaceline-evil-visual nil
-		      :background (doom-color (quote fg)))
-  (set-face-attribute 'spaceline-evil-replace nil
-		      :background (doom-color (quote orange)))
-  (set-face-attribute 'spaceline-evil-emacs nil
-		      :background (doom-color (quote cyan)))
-  (set-face-attribute 'spaceline-evil-motion nil
-		      :background (doom-color (quote violet))))
+  (setq powerline-default-separator 'slant)
+  (setq powerline-height 29))
 
-;; SPACELINE ICONS :: use icons in spaceline
-(use-package spaceline-all-the-icons
+(use-package airline-themes
   :ensure t
-  :pin melpa
-  :after spaceline
   :config
-  (spaceline-all-the-icons-theme)
-  (setq spaceline-all-the-icons-separator-type 'none))
+  (load-theme 'airline-powerlineish t)
+  (setq powerline-utf-8-separator-left      #xe0b0
+      powerline-utf-8-separator-right       #xe0b2
+      airline-utf-glyph-separator-left      #xe0b0
+      airline-utf-glyph-separator-right     #xe0b2
+      airline-utf-glyph-subseparator-left   #xe0b1
+      airline-utf-glyph-subseparator-right  #xe0b3
+      airline-utf-glyph-branch              #xe0a0
+      airline-utf-glyph-readonly            #xe0a2
+      airline-utf-glyph-linenumber          #xe0a1))
 
+;; Custom theming :: there is too much cruft in the modeline,
+;; and all-the-icons makes it simpler to represent
+
+
+;; EVIL :: (emulated) vim text control
 
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode)
-
-
-;; EVIL :: (emulated) vim text control
 
 ;; EVIL SURROUND :: surround text objects
 (use-package evil-surround
