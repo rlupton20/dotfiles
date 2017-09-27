@@ -594,8 +594,11 @@
 (define-key evil-visual-state-map (kbd "C-k") 'move-text-up)
 
 
-;; HYDRAS :: Hydras for controlling emacs
-(defhydra hydra-window-manager-menu (:hint nil)
+
+;;; HYDRAS :: Hydras for controlling emacs
+
+;; Window management hydra
+(defhydra hydra-window-manager (:hint nil)
   "Window management"
   ("-" split-vertical-to-next-buffer "vertical split")
   ("\\" split-horizontal-to-next-buffer "horizontal split")
@@ -607,8 +610,61 @@
   ("l" evil-window-right "right")
   ("b" helm-buffers-list "switch buffer"))
 
+
+;; Theme control hydra
+(defun theme/choose-doom-molokai ()
+  "Set theme to doom-molokai."
+  (interactive)
+  (load-theme 'doom-molokai t)
+  (set-face-attribute 'hl-sexp-face nil
+		      :background (doom-color (quote bg-alt)))
+  (load-theme 'airline-doom-molokai t))
+
+(defun theme/choose-molokai-powerline ()
+  "Set theme to doom-molokai with powerlineish powerline theme."
+  (interactive)
+  (load-theme 'doom-molokai t)
+  (set-face-attribute 'hl-sexp-face nil
+		      :background (doom-color (quote bg-alt)))
+  (load-theme 'airline-powerlineish t))
+
+(defun theme/choose-solarized-dark ()
+  "Set theme to solarized dark."
+  (interactive)
+  (setq powerline-default-separator 'bar)
+  (load-theme 'solarized t)
+  (set-face-attribute 'hl-sexp-face nil
+		      :background "#073642")
+  (load-theme 'airline-solarized-gui t))
+
+(defun theme/choose-doom-one ()
+  "Set theme to doom-one."
+  (interactive)
+  (load-theme 'doom-one t)
+  (load-theme 'airline-doom-one t))
+
+(defhydra hydra-theme-menu (:hint nil)
+  "Theme selection"
+  ("m" theme/choose-doom-molokai "Doom molokai")
+  ("M" theme/choose-molokai-powerline "Molokai with pure Powerline")
+  ("s" theme/choose-solarized-dark "Solarized dark")
+  ("o" theme/choose-doom-one "Doom one"))
+
+;; Control hydras :: hydras that collect other control hydras together
+(defhydra hydra-emacs-control (:hint nil)
+  "Control panel"
+  ("w" hydra-window-manager/body "Window management" :exit t))
+
 (evil-leader/set-key
-  "wh" 'hydra-window-manager-menu/body)
+  "c" 'hydra-emacs-control/body)
+
+(defhydra hydra-emacs-meta-control (:hint nil)
+  "Configuration panel"
+  ("t" hydra-theme-menu/body "Theming" :exit t))
+
+(evil-leader/set-key
+  "C" 'hydra-emacs-meta-control/body)
+
 
 ;;; OTHER NICE THINGS :: Other things that are nice to have
 
