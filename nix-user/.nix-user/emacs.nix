@@ -2,13 +2,9 @@
 with pkgs;
 let
 
-  custom-emacs-platform =
-    emacsPackagesNg.override (super: self: {
-      emacs = emacs25;
-    }); 
+  custom-emacs-platform = emacsPackagesNgGen emacs;
 
-  base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: [
-    ]);
+  base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: []);
 
   dotfile = builtins.readFile ./.emacs;
 

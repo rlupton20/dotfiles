@@ -9,10 +9,16 @@ let
   obelisk = import (builtins.fetchTarball https://github.com/rlupton20/alt-nixpkgs/archive/master.tar.gz) {};
 
   yeganesh = haskellPackages.yeganesh;
+  xmobar = haskellPackages.xmobar;
+
+  qutebrowser = pkgs.qutebrowser.override {
+    withWebEngineDefault = true;
+  };
 
   idris = haskellPackages.idris;
 
-  gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
+#  gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
+  gnupg1compat = pkgs.gnupg1;
 
   ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
       hindent
@@ -122,6 +128,7 @@ let
   xmonadSupport = {
     inherit
       rxvt_unicode
+      xmobar
       maim
       slop
       xclip
