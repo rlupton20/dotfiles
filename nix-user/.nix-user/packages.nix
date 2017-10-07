@@ -37,6 +37,12 @@ let
 
   terraform = unstable.terraform;
 
+  texlive-collection = texlive.combine {
+    inherit
+      (texlive)
+      scheme-basic;
+  };
+
   powerline = python35Packages.powerline;
 
   csv = obelisk.miniTools.csv;
@@ -61,6 +67,7 @@ let
       gnupg1compat
 
       custom-vim
+      custom-neovim
       custom-emacs;
   };
 
@@ -122,6 +129,11 @@ let
       i3lock;
   };
 
+  latexTools = {
+    inherit
+      texlive-collection;
+  };
+
   myTools = {
     inherit
       csv;
@@ -140,5 +152,5 @@ let
 
 in
 
-(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // myTools // others)
+(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others)
 
