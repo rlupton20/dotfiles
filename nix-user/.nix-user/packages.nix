@@ -1,17 +1,37 @@
 # Custom user packages
 
-with (import <nixpkgs> { overlays = [
-  (import ((builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz)+"/rust-overlay.nix"))
-  ]; 
-}); 
-with (import ./vim.nix {} );
-with (import ./emacs.nix {} );
 let
+
+  # First we configure our required packages
+  rust-overlay = import ((builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz)+"/rust-overlay.nix");
+
+  pkgs = import <nixpkgs> { 
+    overlays = [
+      rust-overlay
+    ]; 
+  }; 
+
+in with pkgs; let
+
+  # Additional package sets
   unstable = import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
   obelisk = import (builtins.fetchTarball https://github.com/rlupton20/alt-nixpkgs/archive/master.tar.gz) {};
 
+  # Bring our custom vims into scope
+  vims = import ./vim.nix { inherit pkgs; };
+  custom-vim = vims.custom-vim;
+  custom-neovim = vims.custom-neovim;
+
+  # Bring our custom emacs into scope
+  emacsen = import ./emacs.nix { inherit pkgs; };
+  custom-emacs = emacsen.custom-emacs;
+
+  # We need to specify some other packages more precisely, which we do here
   yeganesh = haskellPackages.yeganesh;
   xmobar = haskellPackages.xmobar;
+
+  xinput = xorg.xinput;
+  xmodmap = xorg.xmodmap;
 
   qutebrowser = pkgs.qutebrowser.override {
     withWebEngineDefault = true;
@@ -19,7 +39,7 @@ let
 
   idris = haskellPackages.idris;
 
-  gnupg1compat = pkgs.gnupg1;
+  gpg = gnupg1;
 
   ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
       hindent
@@ -43,6 +63,7 @@ let
 
   terraform = unstable.terraform;
 
+  # LaTeX installation
   texlive-collection = texlive.combine {
     inherit
       (texlive)
@@ -53,6 +74,7 @@ let
 
   csv = obelisk.miniTools.csv;
 
+  # Package groups (makes it easier to thin down an install)
   base = {
     inherit
       stdenv
@@ -70,7 +92,7 @@ let
       tmux
       powerline
       xmodmap
-      gnupg1compat
+      gpg
 
       custom-vim
       custom-neovim
@@ -157,6 +179,6 @@ let
   };
 
 in
-
+# Package groups we want installed
 (base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others)
 
