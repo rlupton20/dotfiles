@@ -4,7 +4,6 @@ with (import <nixpkgs> { overlays = [
   (import ((builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz)+"/rust-overlay.nix"))
   ]; 
 }); 
-with (import <nixpkgs> {}).xorg; 
 with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
 let
