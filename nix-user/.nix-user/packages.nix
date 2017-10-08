@@ -1,6 +1,9 @@
 # Custom user packages
 
-with (import <nixpkgs> {}); 
+with (import <nixpkgs> { overlays = [
+  (import ((builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz)+"/rust-overlay.nix"))
+  ]; 
+}); 
 with (import <nixpkgs> {}).xorg; 
 with (import ./vim.nix {} );
 with (import ./emacs.nix {} );
@@ -17,7 +20,6 @@ let
 
   idris = haskellPackages.idris;
 
-#  gnupg1compat = pkgs.gnupg1compat.override { gnupg = pkgs.gnupg21; };
   gnupg1compat = pkgs.gnupg1;
 
   ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
@@ -34,8 +36,7 @@ let
   elm-package = unstable.elmPackages.elm-package;
   elm-format = unstable.elmPackages.elm-format;
 
-  cargo = unstable.cargo;
-  rustc = unstable.rustc;
+  rust = latest.rustChannels.nightly.rust;
 
   nodejs = unstable.nodejs;
   eslint = unstable.nodePackages.eslint;
@@ -85,8 +86,7 @@ let
 
   rustTools = {
     inherit
-      rustc
-      cargo
+      rust
       rustfmt
       rustracer;
   };
