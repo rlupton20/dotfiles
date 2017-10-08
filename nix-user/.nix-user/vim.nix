@@ -47,7 +47,7 @@ with pkgs; rec {
   custom-neovim = neovim.override {
     configure = {
       customRC = ''
-	colorscheme molokai
+      	colorscheme molokai
         set relativenumber
 
         let g:airline_powerline_fonts = 1

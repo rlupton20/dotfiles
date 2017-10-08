@@ -48,14 +48,17 @@ in with pkgs; let
       hlint
     ]);
 
-
   elm-repl = unstable.elmPackages.elm-repl;
   elm-reactor = unstable.elmPackages.elm-reactor;
   elm-make = unstable.elmPackages.elm-make;
   elm-package = unstable.elmPackages.elm-package;
   elm-format = unstable.elmPackages.elm-format;
 
-  rust = latest.rustChannels.nightly.rust;
+  rust = latest.rustChannels.nightly.rust.override { 
+    extensions = [ 
+      "rust-src" 
+    ]; 
+  };
 
   nodejs = unstable.nodejs;
   eslint = unstable.nodePackages.eslint;
