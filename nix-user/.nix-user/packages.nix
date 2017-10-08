@@ -3,7 +3,16 @@
 let
 
   # First we configure our required packages
-  rust-overlay = import ((builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz)+"/rust-overlay.nix");
+  _fetchFromGitHub = (import <nixpkgs> {}).fetchFromGitHub;
+
+  nixpkgs-mozilla = _fetchFromGitHub {
+    owner = "mozilla";
+    repo = "nixpkgs-mozilla";
+    rev = "6179dd876578ca2931f864627598ede16ba6cdef";
+    sha256 = "1lim10a674621zayz90nhwiynlakxry8fyz1x209g9bdm38zy3av";
+  };
+
+  rust-overlay = import "${nixpkgs-mozilla}/rust-overlay.nix"; 
 
   pkgs = import <nixpkgs> { 
     overlays = [
