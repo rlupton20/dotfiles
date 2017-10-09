@@ -1,8 +1,29 @@
-# Custom user packages
+################################################################################
+## NIX MANIFEST
+## Richard Lupton 2017
+##
+## This nix expression exposes all the packages which I want installed on the
+## system. Packages can be installed with
+##   $ nix-env -f file_name.nix -ir
+##
+## There are 4 main sections to this file
+##   1) The first section configures pkgs to be nixpkgs with any required
+##      customizations or overlays.
+##   2) The second describes any custom packages/customizations to existing
+##      packages.
+##   3) Packages are then grouped into package groups. This is so the
+##      final set can be described as a merge of these groups, which allows
+##      for easier selection of tools on a system where not everything is
+##      required.
+##   4) The fourth section is a merge of attribute sets (package groups).
+##      All these packages will be installed when the above shell command
+##      is run.
+################################################################################
 
 let
-
-  # First we configure our required packages
+  ##############################################################################
+  ## PACKAGE SET CONFIGURATION
+  ##############################################################################
   _fetchFromGitHub = (import <nixpkgs> {}).fetchFromGitHub;
 
   nixpkgs-mozilla = _fetchFromGitHub {
@@ -14,6 +35,7 @@ let
 
   rust-overlay = import "${nixpkgs-mozilla}/rust-overlay.nix"; 
 
+  # Define pkgs as <nixpkgs> with some overlays
   pkgs = import <nixpkgs> { 
     overlays = [
       rust-overlay
@@ -21,6 +43,9 @@ let
   }; 
 
 in with pkgs; let
+  ##############################################################################
+  ## PACKAGE CUSTOMIZATIONS
+  ##############################################################################
 
   # Additional package sets
   unstable = import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
@@ -32,23 +57,12 @@ in with pkgs; let
   custom-neovim = vims.custom-neovim;
 
   # Bring our custom emacs into scope
-  emacsen = import ./emacs.nix { inherit pkgs; };
-  custom-emacs = emacsen.custom-emacs;
+  custom-emacs = (import ./emacs.nix { inherit pkgs; }).custom-emacs;
 
   # We need to specify some other packages more precisely, which we do here
-  yeganesh = haskellPackages.yeganesh;
-  xmobar = haskellPackages.xmobar;
-
-  xinput = xorg.xinput;
-  xmodmap = xorg.xmodmap;
-
   qutebrowser = pkgs.qutebrowser.override {
     withWebEngineDefault = true;
   };
-
-  idris = haskellPackages.idris;
-
-  gpg = gnupg1;
 
   ghc = haskellPackages.ghcWithHoogle(packages: with packages; [
       hindent
@@ -57,23 +71,11 @@ in with pkgs; let
       hlint
     ]);
 
-  elm-repl = unstable.elmPackages.elm-repl;
-  elm-reactor = unstable.elmPackages.elm-reactor;
-  elm-make = unstable.elmPackages.elm-make;
-  elm-package = unstable.elmPackages.elm-package;
-  elm-format = unstable.elmPackages.elm-format;
-
   rust = latest.rustChannels.nightly.rust.override { 
     extensions = [ 
       "rust-src" 
     ]; 
   };
-
-  nodejs = unstable.nodejs;
-  eslint = unstable.nodePackages.eslint;
-  tern = unstable.nodePackages.tern;
-
-  terraform = unstable.terraform;
 
   # LaTeX installation
   texlive-collection = texlive.combine {
@@ -82,12 +84,45 @@ in with pkgs; let
       scheme-basic;
   };
 
-  powerline = python35Packages.powerline;
 
-  csv = obelisk.miniTools.csv;
+  xargo-drv = { rustPlatform, stdenv, fetchFromGitHub }:
+    rustPlatform.buildRustPackage rec {
+      name = "xargo-${version}";
+      version = "v0.3.9";
 
-  # Package groups (makes it easier to thin down an install)
+      src = fetchFromGitHub {
+        owner = "japaric";
+        repo = "xargo";
+        rev = "${version}";
+        sha256 = "0p1bl41qkcr4bmrfkbz7n37hc6jakw5a2d9652zs8kiz5fk347c1";
+      };
+
+      depsSha256 = "19gn14r98qzmfkp5vkzkngm38l5fydik39q71fi5mryap30c15mb";
+
+      meta = with stdenv.lib; {
+        description = "Cargo which allows customization of std";
+        homepage = "https://github.com/japaric/xargo";
+        license = with licenses; [ mit /* or */ asl20 ];
+        platforms = platforms.all;
+      };
+    };
+
+  xargo-rustPlatform = recurseIntoAttrs (makeRustPlatform {
+    rustc = latest.rustChannels.nightly.rust;
+    cargo = latest.rustChannels.nightly.cargo;
+  });
+
+  xargo = xargo-drv { 
+    rustPlatform = xargo-rustPlatform; 
+    inherit stdenv fetchFromGitHub; 
+  };
+
+  ##############################################################################
+  ## PACKAGE GROUPS
+  ##############################################################################
   base = {
+    xmodmap = xorg.xmodmap;
+    powerline = python35Packages.powerline;
     inherit
       stdenv
       gcc
@@ -99,12 +134,9 @@ in with pkgs; let
       ranger
       zathura
       htop
-      yeganesh
       rofi
       tmux
-      powerline
-      xmodmap
-      gpg
+      gnupg1
 
       custom-vim
       custom-neovim
@@ -120,6 +152,7 @@ in with pkgs; let
   rustTools = {
     inherit
       rust
+      #xargo
       rustfmt
       rustracer;
   };
@@ -136,36 +169,34 @@ in with pkgs; let
   };
 
   elmTools = {
-    inherit
-      elm-repl
-      elm-reactor
-      elm-make
-      elm-package
-      elm-format;
+    elm-repl = unstable.elmPackages.elm-repl;
+    elm-reactor = unstable.elmPackages.elm-reactor;
+    elm-make = unstable.elmPackages.elm-make;
+    elm-package = unstable.elmPackages.elm-package;
+    elm-format = unstable.elmPackages.elm-format;
   };
 
   jsTools = {
-    inherit
-      nodejs
-      tern
-      eslint;
+    nodejs = unstable.nodejs;
+    eslint = unstable.nodePackages.eslint;
+    tern = unstable.nodePackages.tern;
   };
 
   opsTools = {
+    terraform = unstable.terraform;
     inherit
       virtinst
-      virt-viewer
-      terraform;
+      virt-viewer;
   };
 
   xmonadSupport = {
+    xinput = xorg.xinput;
+    xmobar = haskellPackages.xmobar;
     inherit
       rxvt_unicode
-      xmobar
       maim
       slop
       xclip
-      xinput
       i3lock;
   };
 
@@ -175,14 +206,12 @@ in with pkgs; let
   };
 
   myTools = {
-    inherit
-      csv;
+    csv = obelisk.miniTools.csv;
   };
 
   others = {
+    idris = haskellPackages.idris;
     inherit
-      idris
-
       weechat
 
       firefox
@@ -191,6 +220,8 @@ in with pkgs; let
   };
 
 in
-# Package groups we want installed
+################################################################################
+## EXPOSED ATTRIBUTES
+################################################################################
 (base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others)
 
