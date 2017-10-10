@@ -2,7 +2,7 @@
 stdenv.mkDerivation {
   name = "custom-tmux";
   src = builtins.readFile ./tmux.conf;
-  buildInputs = [ pkgs.bash tmux powerline ];
+  buildInputs = [ tmux powerline ];
   phases = "installPhase";
   installPhase = ''
     mkdir -p $out/bin
