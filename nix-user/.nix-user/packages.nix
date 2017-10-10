@@ -67,6 +67,8 @@ in with pkgs; let
   # Bring our custom emacs into scope
   custom-emacs = (import ./emacs.nix { inherit pkgs; }).custom-emacs;
 
+  custom-tmux = callPackage ./tmux.nix { powerline = python35Packages.powerline; };
+
   # We need to specify some other packages more precisely, which we do here
   qutebrowser = pkgs.qutebrowser.override {
     withWebEngineDefault = true;
@@ -130,7 +132,6 @@ in with pkgs; let
   ##############################################################################
   base = {
     xmodmap = xorg.xmodmap;
-    powerline = python35Packages.powerline;
     inherit
       stdenv
       gcc
@@ -143,7 +144,7 @@ in with pkgs; let
       zathura
       htop
       rofi
-      tmux
+      custom-tmux
       gnupg1
 
       custom-vim
