@@ -40,14 +40,23 @@ let
     sha256 = "0g0z3v4l6xs8r0apjzhs9g5fq87hjl59dpwbw9msh9psk6kjp321";
   };
 
+  nxe-repository = _fetchFromGitHub {
+    owner = "rlupton20";
+    repo = "nxe";
+    rev = "a80f4a86775ef3bec91c0c52abbf848c1f88b423";
+    sha256 = "0x3z2lyqrncs90jfyrgl9qbc017c75qky79nbfj637cb2l95dxrh";
+  };
+
   rust-overlay = import "${nixpkgs-mozilla}/rust-overlay.nix"; 
   obelisk-overlay = import "${obelisk-nixpkgs}/overlay.nix";
+  nxe-overlay = import "${nxe-repository}/overlay.nix";
 
   # Define pkgs as <nixpkgs> with some overlays
   pkgs = import <nixpkgs> { 
     overlays = [
       rust-overlay
       obelisk-overlay
+      nxe-overlay
     ]; 
   }; 
 
@@ -214,6 +223,10 @@ in with pkgs; let
       texlive-collection;
   };
 
+  nxe-tools = {
+    nxe-build-image = nxe.tools.nxe-build-image;
+  };
+  
   myTools = {
     csv = obelisk.miniTools.csv;
   };
