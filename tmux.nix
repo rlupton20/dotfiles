@@ -1,7 +1,7 @@
 { powerline, tmux, stdenv, pkgs }:
 stdenv.mkDerivation {
   name = "custom-tmux";
-  src = builtins.readFile ./tmux.conf;
+  src = builtins.readFile ./tmux/.tmux.conf;
   buildInputs = [ tmux powerline ];
   phases = "installPhase";
   installPhase = ''

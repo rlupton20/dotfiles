@@ -6,7 +6,7 @@ let
 
   base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: []);
 
-  dotfile = builtins.readFile ./.emacs;
+  dotfile = builtins.readFile ./emacs/.emacs;
 
 in
   with pkgs; rec {
