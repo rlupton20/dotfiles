@@ -33,12 +33,21 @@ let
     sha256 = "1lim10a674621zayz90nhwiynlakxry8fyz1x209g9bdm38zy3av";
   };
 
+  obelisk-nixpkgs = _fetchFromGitHub {
+    owner = "rlupton20";
+    repo = "alt-nixpkgs";
+    rev = "2323318c7ad0c72934e9e0e01be82073d7c1f89e";
+    sha256 = "0g0z3v4l6xs8r0apjzhs9g5fq87hjl59dpwbw9msh9psk6kjp321";
+  };
+
   rust-overlay = import "${nixpkgs-mozilla}/rust-overlay.nix"; 
+  obelisk-overlay = import "${obelisk-nixpkgs}/overlay.nix";
 
   # Define pkgs as <nixpkgs> with some overlays
   pkgs = import <nixpkgs> { 
     overlays = [
       rust-overlay
+      obelisk-overlay
     ]; 
   }; 
 
@@ -49,7 +58,6 @@ in with pkgs; let
 
   # Additional package sets
   unstable = import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {};
-  obelisk = import (builtins.fetchTarball https://github.com/rlupton20/alt-nixpkgs/archive/master.tar.gz) {};
 
   # Bring our custom vims into scope
   vims = import ./vim.nix { inherit pkgs; };
