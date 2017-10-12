@@ -25,6 +25,7 @@ let
   ## PACKAGE SET CONFIGURATION
   ##############################################################################
   _fetchFromGitHub = (import <nixpkgs> {}).fetchFromGitHub;
+  _licenses = (import <nixpkgs> {}).stdenv.lib.licenses;
 
   nixpkgs-mozilla = _fetchFromGitHub {
     owner = "mozilla";
@@ -52,12 +53,18 @@ let
   nxe-overlay = import "${nxe-repository}/overlay.nix";
 
   # Define pkgs as <nixpkgs> with some overlays
+  # Also blacklist unfree licenses
   pkgs = import <nixpkgs> { 
     overlays = [
       rust-overlay
       obelisk-overlay
       nxe-overlay
     ]; 
+    config = {
+      blacklistedLicenses = with _licenses; [
+        unfreeRedistributableFirmware
+      ];
+    };
   }; 
 
 in with pkgs; let
@@ -151,6 +158,7 @@ in with pkgs; let
     
       ranger
       zathura
+      w3m
       htop
       rofi
       custom-tmux
