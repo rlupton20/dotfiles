@@ -16,7 +16,7 @@ defaultMask = mod4Mask
 -- We use other modifiers sometimes too
 hyper = mod3Mask
 control = controlMask
-terminalCmd = "urxvt -tr -sh 25"
+terminalCmd = "urxvt -tr -sh 25 -mod mod1"
 
 toggleMouse :: String
 toggleMouse = "xinput --list-props 11 | awk '/Device Enabled/ {toggle = 1 - $4; print toggle}' | xargs xinput set-int-prop 11 \"Device Enabled\" 8"
