@@ -110,6 +110,12 @@ in with pkgs; let
       scheme-basic;
   };
 
+  dwm = pkgs.dwm.override {
+    patches = [
+      ./dwm/basic-setup.patch
+    ];
+  };
+
 
   xargo-drv = { rustPlatform, stdenv, fetchFromGitHub }:
     rustPlatform.buildRustPackage rec {
@@ -253,5 +259,5 @@ in
 ################################################################################
 ## EXPOSED ATTRIBUTES
 ################################################################################
-(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others)
+(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others // nxe-tools)
 

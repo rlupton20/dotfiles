@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     
     cat > $out/bin/tmux <<EOF
 #!/usr/bin/env sh
-PATH=${powerline}/bin:$PATH ${tmux}/bin/tmux -f $out/etc/tmux.conf
+PATH=${powerline}/bin:$PATH ${tmux}/bin/tmux -f $out/etc/tmux.conf \$@
 EOF
 
     chmod +x $out/bin/tmux

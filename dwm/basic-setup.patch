@@ -1,0 +1,46 @@
+diff --git a/config.def.h b/config.def.h
+index 7054c06..b99e7d4 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -4,7 +4,7 @@
+ static const char *fonts[] = {
+ 	"monospace:size=10"
+ };
+-static const char dmenufont[]       = "monospace:size=10";
++static const char dmenufont[]       = "Hack:size=10";
+ static const char normbordercolor[] = "#444444";
+ static const char normbgcolor[]     = "#222222";
+ static const char normfgcolor[]     = "#bbbbbb";
+@@ -32,17 +32,17 @@ static const Rule rules[] = {
+ /* layout(s) */
+ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+ static const int nmaster     = 1;    /* number of clients in master area */
+-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
++static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+ 
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+-	{ "[]=",      tile },    /* first entry is default */
+-	{ "><>",      NULL },    /* no layout function means floating behavior */
++	{ "[T]",      tile },    /* first entry is default */
++	{ "[F]",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+ };
+ 
+ /* key definitions */
+-#define MODKEY Mod1Mask
++#define MODKEY Mod4Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+@@ -54,8 +54,8 @@ static const Layout layouts[] = {
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+-static const char *termcmd[]  = { "st", NULL };
++static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL};
++static const char *termcmd[]  = { "urxvt", "-tr", "-sh", "25", NULL };
+ 
+ static Key keys[] = {
+ 	/* modifier                     key        function        argument */
