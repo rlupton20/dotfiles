@@ -68,8 +68,10 @@
   :ensure t
   :config
   (setq doom-enable-bold t
-	doom-enable-italic t)
-  (load-theme 'doom-molokai t))
+	doom-enable-italic t))
+
+(use-package color-theme-sanityinc-solarized
+  :ensure t)
 
 ;; ICONS :: Nicer icons
 (use-package all-the-icons
@@ -133,26 +135,6 @@
 (use-package helm-swoop
   :ensure t
   :after helm)
-
-
-;; GIT GUTTER :: Display change indicators in margin
-(use-package git-gutter
-  :ensure t
-  :after linum-relative
-  :bind (("H-g" . git-gutter-mode))
-  :config
-  (let ((dotemacs:background-colour monokai-background))
-    (git-gutter:linum-setup)
-    (custom-set-variables
-     '(git-gutter:modified-sign "~>")
-     '(git-gutter:added-sign "++")
-     '(git-gutter:deleted-sign "--"))
-    (set-face-foreground 'git-gutter:added "green")
-    (set-face-background 'git-gutter:added dotemacs:background-colour)
-    (set-face-foreground 'git-gutter:deleted "red")
-    (set-face-background 'git-gutter:deleted dotemacs:background-colour)
-    (set-face-foreground 'git-gutter:modified "cyan")
-    (set-face-background 'git-gutter:modified dotemacs:background-colour)))
 
 
 ;;; Odd tweaks for general behaviour
@@ -632,10 +614,10 @@
   "Set theme to solarized dark."
   (interactive)
   (setq powerline-default-separator 'bar)
-  (load-theme 'solarized t)
+  (color-theme-sanityinc-solarized-dark)
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#073642")
-  (load-theme 'airline-solarized-gui t))
+  (load-theme 'airline-powerlineish t))
 
 (defun theme/choose-doom-one ()
   "Set theme to doom-one."
@@ -672,6 +654,14 @@
 (use-package sicp
   :ensure t)
 
+;; THEME SETTING :: Override default themes
+;; Different machine need different setups to look nice.
+;; We provide a default, but allow a different theme to be
+;; specified by setting an environment variable
+(let ((theme (getenv "CUSTOM_EMACS_THEME")))
+  (cond
+   ((string-equal theme "SOLARIZED") (theme/choose-solarized-dark))
+   (t (theme/choose-molokai-powerline))))
 
 ;; LOCAL CUSTOMIZATIONS :: Custom local configuration (if it exists)
 (let ((local-file "~/.emacs-local"))
@@ -680,3 +670,4 @@
 
 (provide '.emacs)
 ;;; .emacs ends here
+
