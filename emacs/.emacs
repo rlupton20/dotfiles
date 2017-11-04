@@ -614,10 +614,19 @@
   "Set theme to solarized dark."
   (interactive)
   (setq powerline-default-separator 'bar)
-  (color-theme-sanityinc-solarized-dark)
+  (load-theme 'sanityinc-solarized-dark t)
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#073642")
-  (load-theme 'airline-powerlineish t))
+  (load-theme 'airline-solarized-alternate-gui t))
+
+(defun theme/choose-solarized-light ()
+  "Set theme to solarized dark."
+  (interactive)
+  (setq powerline-default-separator 'bar)
+  (load-theme 'sanityinc-solarized-light t)
+  (set-face-attribute 'hl-sexp-face nil
+		      :background "#eee8d5")
+  (load-theme 'airline-solarized-alternate-gui t))
 
 (defun theme/choose-doom-one ()
   "Set theme to doom-one."
@@ -630,6 +639,7 @@
   ("m" theme/choose-doom-molokai "Doom molokai")
   ("M" theme/choose-molokai-powerline "Molokai with pure Powerline")
   ("s" theme/choose-solarized-dark "Solarized dark")
+  ("S" theme/choose-solarized-light "Solarized light")
   ("o" theme/choose-doom-one "Doom one"))
 
 ;; Control hydras :: hydras that collect other control hydras together
