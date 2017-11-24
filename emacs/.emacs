@@ -98,6 +98,10 @@
 		      :foreground (doom-color (quote bg))
 		      :background (doom-color (quote base5))))
 
+(use-package rainbow-delimiters
+  :ensure t
+  :diminish rainbow-delimiters-mode)
+
 ;; ELISP :: Setup for editing emacs lisp
 (use-package hl-sexp
   :ensure t
@@ -418,7 +422,8 @@
   :defer
   :config
   (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
-  (add-hook 'clojure-mode-hook 'hl-sexp-mode))
+  (add-hook 'clojure-mode-hook 'hl-sexp-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode))
 
 (use-package cider
   :defer
