@@ -618,7 +618,7 @@
 (defun theme/choose-solarized-dark ()
   "Set theme to solarized dark."
   (interactive)
-  (setq powerline-default-separator 'bar)
+  (setq powerline-default-separator 'arrow)
   (load-theme 'sanityinc-solarized-dark t)
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#073642")
@@ -627,7 +627,7 @@
 (defun theme/choose-solarized-light ()
   "Set theme to solarized dark."
   (interactive)
-  (setq powerline-default-separator 'bar)
+  (setq powerline-default-separator 'arrow)
   (load-theme 'sanityinc-solarized-light t)
   (set-face-attribute 'hl-sexp-face nil
 		      :background "#eee8d5")
