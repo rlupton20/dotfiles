@@ -78,18 +78,7 @@
   :ensure t)
 
 
-;; WHITESPACE MODE :: Configure whitespace mode to show potential
-;; untidiness in code. Add it automatically to programming modes.
-(use-package whitespace
-  :ensure t
-  :diminish whitespace-mode
-  :config
-  (setq whitespace-style '(face tabs lines))
-  (set-face-attribute 'whitespace-line nil
-		      :background (doom-color (quote base3))
-		      :foreground 'unspecified)
-  (add-hook 'prog-mode-hook 'whitespace-mode))
-
+;; BRACKETS :: better tracking of parentheses
 (use-package smartparens
   :ensure t
   :diminish smartparens-mode
@@ -102,13 +91,13 @@
   :ensure t
   :diminish rainbow-delimiters-mode)
 
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+
 ;; ELISP :: Setup for editing emacs lisp
 (use-package hl-sexp
   :ensure t
   :diminish hl-sexp-mod
   :config
-  (set-face-attribute 'hl-sexp-face nil
-		      :background (doom-color (quote bg-alt)))
   (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode))
 
 ;; Enable smartparens in elisp mode
