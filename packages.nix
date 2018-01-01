@@ -107,7 +107,9 @@ in with pkgs; let
   texlive-collection = texlive.combine {
     inherit
       (texlive)
-      scheme-basic;
+      scheme-basic
+      collection-xetex
+      collection-fontsrecommended;
   };
 
   dwm = pkgs.dwm.override {
@@ -197,7 +199,9 @@ in with pkgs; let
 
   clojureTools = {
     inherit
-      leiningen;
+      jdk
+      leiningen
+      boot;
   };
 
   elmTools = {
@@ -215,7 +219,6 @@ in with pkgs; let
   };
 
   opsTools = {
-    terraform = unstable.terraform;
     inherit
       virtinst
       virt-viewer;
@@ -235,6 +238,11 @@ in with pkgs; let
   latexTools = {
     inherit
       texlive-collection;
+  };
+
+  sipTools = {
+    inherit
+      sipp;
   };
 
   nxe-tools = {
@@ -259,5 +267,18 @@ in
 ################################################################################
 ## EXPOSED ATTRIBUTES
 ################################################################################
-(base // haskellTools // rustTools // scalaTools // clojureTools // elmTools // jsTools // opsTools // xmonadSupport // latexTools // myTools // others // nxe-tools)
+(base
+// haskellTools
+// rustTools
+// scalaTools
+// clojureTools
+// elmTools
+// jsTools
+// opsTools
+// xmonadSupport
+// latexTools
+// myTools
+// sipTools
+// others
+// nxe-tools)
 
