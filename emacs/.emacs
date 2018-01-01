@@ -511,6 +511,11 @@
   (define-key evil-normal-state-map (kbd "H-a") 'evil-numbers/inc-at-pt)
   (define-key evil-normal-state-map (kbd "H-x") 'evil-numbers/dec-at-pt))
 
+;; KEY CHORD :: Enable key chords
+(use-package key-chord
+  :ensure t
+  :config
+  (key-chord-mode 1))
 
 ;; EVIL LEADER :: leader key for commands
 (use-package evil-leader
@@ -545,9 +550,18 @@
 ;; M-. is often used for jump to definition, which is useful in normal mode
 (define-key evil-normal-state-map (kbd "M-.") nil)
 
-;; Keybindings for move-text
-(define-key evil-visual-state-map (kbd "C-j") 'move-text-down)
-(define-key evil-visual-state-map (kbd "C-k") 'move-text-up)
+;; It's handy to chunk undos from insert mode, when typing long pieces
+;; of text, so we create an insert-mode key-chord to leave insert mode
+;; and enter it again immediately. We bind it to the keychord 'jk'
+(defun evil-custom/insert-chunk-undo ()
+  "Go to normal state then immediately go to insert state."
+  (interactive)
+  (evil-normal-state)
+  (evil-append 1))
+
+(key-chord-define evil-insert-state-map "jk"
+ 'evil-custom/insert-chunk-undo)
+
 
 
 
