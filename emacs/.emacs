@@ -87,6 +87,10 @@
 		      :foreground (doom-color (quote bg))
 		      :background (doom-color (quote base5))))
 
+;; Enable smartparens in elisp mode
+(add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+
+
 (use-package rainbow-delimiters
   :ensure t
   :diminish rainbow-delimiters-mode)
@@ -99,9 +103,6 @@
   :diminish hl-sexp-mod
   :config
   (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode))
-
-;; Enable smartparens in elisp mode
-(add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
 
 
 ;; TRAMP :: Fix tramps remote paths - this is needed in order that
@@ -249,28 +250,11 @@
 
 ;; FLYCHECK :: On the fly syntax checking
 
-;; First we write some utility functions to look inside a nix sandbox, but only
-;; if there is one
-(defun nix-maybe-shell-command (command)
-  (if (nix-current-sandbox)
-      (apply 'nix-shell-command (nix-current-sandbox) command)
-    command))
-
-(defun nix-maybe-executable-find (command)
-  (if (nix-current-sandbox)
-      (apply 'nix-executable-find (nix-current-sandbox) command)
-    command))
-
 (use-package flycheck
   :ensure t
-  :config (setq flycheck-command-wrapper-function
-		(lambda (command) command)
-		flycheck-executable-find
-		(lambda (command) command))
-          (global-flycheck-mode))
+  :config 
+  (global-flycheck-mode))
 
-(use-package multiple-cursors
-  :ensure t)
 
 ;; HYDRA :: library for creating magit-like keyboard driven menus
 (use-package hydra
@@ -299,14 +283,10 @@
 (use-package markdown-mode
   :ensure t)
 
-;; EMAMUX :: control tmux sessions from emacs
-(use-package emamux
-  :ensure t)
-
 
 ;; HASKELL :: modes for working with Haskell code
 ;; -- External dependencies --
-;; happy, hindent, hasktags, stylish-haskell, ghc-mod, hlint, hoogle, hare
+;; stack
 
 ;; Haskell modes use various packages installed by cabal,
 ;; so we need to add cabal's bin directory to our path
