@@ -358,22 +358,6 @@
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 
-;;; ELM :: editing modes and configuration for elm
-(use-package elm-mode
-  :ensure t
-  :after company
-  :defer
-  :config
-  (add-to-list 'company-backends 'company-elm)
-  (add-hook 'elm-mode-hook #'elm-oracle-setup-completion))
-
-(use-package flycheck-elm
-  :ensure t
-  :after flycheck
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-elm-setup))
-
-
 ;;; SCALA :: mode for editing scala, with ENSIME integration
 (use-package sbt-mode
   :ensure t
@@ -397,57 +381,6 @@
 (use-package cider
   :defer
   :ensure t)
-
-
-;;; IO :: mode for editing Io
-(use-package io-mode
-  :defer
-  :ensure t)
-
-;; R :: editing modes and configuration for R
-(use-package ess
-  :defer
-  :ensure t)
-
-
-;;; JavaScript :: editing mode and extensions for JavaScript
-(use-package js3-mode
-  :ensure t
-  :defer
-  :config
-  (setq-default js3-indent-level 4)
-  (setq-default flycheck-disabled-checkers
-		(append flycheck-disabled-checkers
-			'(javascript-jshint)))
-  (flycheck-add-mode 'javascript-eslint 'js3-mode)
-  (add-hook 'js3-mode 'smart-parens-mode))
-
-;; use tern to provide backend function
-(use-package tern
-  :ensure t
-  :defer
-  :config
-  (add-hook 'js3-mode-hook (lambda () (tern-mode t))))
-
-(use-package company-tern
-  :ensure t
-  :defer
-  :config
-  (add-to-list 'company-backends 'company-tern)
-  (add-hook 'js3-mode-hook 'company-mode))
-
-
-;;; TypeScript :: editing mode for TypeScript
-(use-package tide
-  :ensure t
-  :defer
-  :config
-  (eldoc-mode t)
-  (tide-hl-identifier-mode t)
-  (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook 'tide-mode)
-  (add-hook 'typescript-mode-hook 'tide-setup))
-
 
 ;;; POWERLINE :: vim-like powerline mode line
 (use-package powerline
