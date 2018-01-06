@@ -44,6 +44,9 @@
 ;; shell anyway, we may as well just use sh
 (setq shell-file-name "sh")
 
+;; adjust tab width and indent
+(setq-default tab-width 4 indent-tabs-mode t)
+
 ;; EMACS SPECIFIC :: more specific emacs customization
 (put 'narrow-to-region 'disabled nil)
 
@@ -283,6 +286,10 @@
 (use-package markdown-mode
   :ensure t)
 
+;; C/C++ :: settings for built in CPP mode
+(require 'cc-mode) ;; load C mode
+(setq-default c-basic-offset 4 c-default-style "linux")
+(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 
 ;; HASKELL :: modes for working with Haskell code
 ;; -- External dependencies --
