@@ -233,6 +233,23 @@
   :config
     (flycheck-mode))
 
+;; COMPANY-MODE :: auto-completion
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :commands company-mode
+  :hook (emacs-lisp-mode . company-mode)
+  :config
+    (setq company-idle-delay 0.5
+            company-minimum-prefix-length 1
+            company-tooltip-align-annotations t))
+
+
+;; COMPANY-QUICKHELP :: Provides documentation for company completions
+(use-package company-quickhelp
+  :ensure t
+  :hook (company-mode . company-quickhelp-mode))
+
 
 ;;; EMACS EDITING MODES :: Tools and modes for working with
 ;;; specific kinds of files
