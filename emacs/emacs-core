@@ -231,7 +231,7 @@
   :diminish flycheck-mode
   :hook (emacs-lisp-mode . flycheck-mode)
   :config
-    (global-flycheck-mode))
+    (flycheck-mode))
 
 
 ;;; EMACS EDITING MODES :: Tools and modes for working with
@@ -284,6 +284,7 @@
 ;; EVIL COMMENTARY :: comment out lines in evil
 (use-package evil-commentary
   :ensure t
+  :diminish evil-commentary-mode
   :config
     (evil-commentary-mode))
 
