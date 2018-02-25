@@ -187,6 +187,7 @@
 (use-package magit
   :ensure t
   :commands magit-status
+  :diminish auto-revert-mode
   :config
     ;; Define a utility function to push a branch to all remotes
     (defun magit-custom-push-current-all-remotes (args)
