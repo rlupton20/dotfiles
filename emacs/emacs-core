@@ -282,6 +282,28 @@
     (evil-define-key 'normal org-mode-map "zf" #'focus-section))
 
 
+;;; KITCHEN SINKS :: Modes that somehow find there way into emacs
+(use-package w3m
+  :ensure t
+  :commands w3m
+  :bind (:map w3m-mode-map
+          ("f" . w3m/jump-follow-link))
+  :config
+    (require 'cl)
+    (defun w3m/jump-follow-link ()
+        "Jump to a link and follow it"
+        (interactive)
+        ;; ace-link-eww tried to follow links using
+        ;; eww-follow-link - we redirect eww-follow-link
+        ;; to w3m-view-this-url
+        (flet ((eww-follow-link () (w3m-view-this-url)))
+          (ace-link-eww))))
+
+;; We can patch ace-link-eww in emacs-w3m to jump to links
+(use-package ace-link
+  :ensure t
+  :commands ace-link-eww)
+
 ;; EVIL :: (emulated) vim text control
 (use-package undo-tree
   :ensure t
