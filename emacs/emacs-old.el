@@ -486,7 +486,6 @@
 ;; Fix keymaps
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
-(define-key evil-insert-state-map (kbd "C-j") 'sp-up-sexp)
 ;; M-. is often used for jump to definition, which is useful in normal mode
 (define-key evil-normal-state-map (kbd "M-.") nil)
 
@@ -501,9 +500,6 @@
 
 (key-chord-define evil-insert-state-map "jk"
  'evil-custom/insert-chunk-undo)
-
-
-
 
 ;;; HYDRAS :: Hydras for controlling emacs
 
@@ -608,4 +604,28 @@
 
 (provide '.emacs)
 ;;; .emacs ends here
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(haskell-tags-on-save t)
+ '(mml-secure-key-preferences
+   (quote
+    ((OpenPGP
+      (sign)
+      (encrypt
+       ("richard.lupton@gmail.com" "6F0268A4CFF8D33BBC83089DB28E6F13314BADC3")))
+     (CMS
+      (sign)
+      (encrypt)))))
+ '(package-selected-packages
+   (quote
+    (rainbow-delimiters yaml-mode weechat use-package tide sicp racer nlinum-relative nixos-options nix-sandbox nix-mode multiple-cursors markdown-mode magit key-chord js3-mode io-mode intero hydra hl-sexp helm-swoop helm-projectile flycheck-rust flycheck-elm evil-surround evil-smartparens evil-numbers evil-leader evil-easymotion evil-commentary ess ensime emamux elpy elm-mode doom-themes company-tern color-theme-sanityinc-solarized cider cargo airline-themes)))
+ '(send-mail-function (quote smtpmail-send-it)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
