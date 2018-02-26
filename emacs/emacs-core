@@ -282,6 +282,32 @@
     (evil-define-key 'normal org-mode-map "zf" #'focus-section))
 
 
+;;; EDITING MODES :: Modes for working with different laguages and formats
+(use-package pipenv
+  :ensure t
+  :diminish pipenv-mode
+  :hook (python-mode . pipenv-mode)
+  :config
+    ;; Set the root virtualenv directory to the one managed by pipenv
+    (let* ((venv-path (shell-command-to-string "pipenv --venv"))
+           (venv-folder (file-name-directory venv-path)))
+      (setenv "WORKON_HOME" venv-folder)))
+
+(use-package elpy
+  :ensure t
+  :diminish elpy-mode highlight-indentation-mode
+  :hook (python-mode . elpy-mode)
+  :config
+    (defun elpy/auto-activate-pipenv-virtualenv ()
+        "Activate the virtualenv provided by pipenv"
+        (interactive)
+        (let ((venv-path (s-trim (shell-command-to-string "pipenv --venv"))))
+          (pyvenv-activate venv-path)))
+
+    (add-hook 'elpy-mode-hook #'elpy/auto-activate-pipenv-virtualenv))
+
+
+
 ;;; KITCHEN SINKS :: Modes that somehow find there way into emacs
 (use-package w3m
   :ensure t
