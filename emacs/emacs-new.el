@@ -149,7 +149,7 @@
   :after evil
   :config
   (nlinum-relative-setup-evil)
-  (setq nlinum-relative-redisplay-delay 0)
+  (setq nlinum-relative-redisplay-delay 0.1)
   (setq nlinum-relative-current-symbol "0")
   (global-nlinum-relative-mode))
 
