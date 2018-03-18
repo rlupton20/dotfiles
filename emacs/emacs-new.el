@@ -112,6 +112,10 @@
             (revert-buffer t t t) )))
       (message "Refreshed open files")))
 
+(use-package eldoc
+  :diminish eldoc-mode
+  :hook (racer-mode . eldoc-mode))
+
 ;; THEMES :: Make emacs look nice
 (use-package leuven-theme
   :ensure t
@@ -230,16 +234,16 @@
 (use-package flycheck
   :ensure t
   :diminish flycheck-mode
-  :hook (emacs-lisp-mode . flycheck-mode)
-  :config
-    (flycheck-mode))
+  :hook ((emacs-lisp-mode . flycheck-mode)
+         (rust-mode . flycheck-mode)))
 
 ;; COMPANY-MODE :: auto-completion
 (use-package company
   :ensure t
   :diminish company-mode
   :commands company-mode
-  :hook (emacs-lisp-mode . company-mode)
+  :hook ((emacs-lisp-mode . company-mode)
+         (racer-mode . company-mode))
   :config
     (setq company-idle-delay 0.5
             company-minimum-prefix-length 1
@@ -283,6 +287,36 @@
 
 
 ;;; EDITING MODES :: Modes for working with different laguages and formats
+
+;;; RUST
+(use-package rust-mode
+  :ensure t
+  :defer
+  :config
+  (setq rust-format-on-save t))
+
+(use-package cargo
+  :ensure t
+  :diminish cargo-minor-mode
+  :after rust-mode
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package racer
+ :ensure t
+ :after rust-mode
+ :diminish racer-mode
+ :hook (rust-mode . racer-mode)
+ :config
+   (setq racer-cmd "racer")
+   (setq racer-rust-src-path (getenv "RUST_SRC_PATH")))
+
+(use-package flycheck-rust
+   :ensure t
+   :after flycheck
+   :hook (flycheck-mode . flycheck-rust-setup))
+
+
+;;; PYTHON
 (use-package pipenv
   :ensure t
   :diminish pipenv-mode
