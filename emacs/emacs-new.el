@@ -160,6 +160,10 @@
 
 ;;; TEXT EDITING UTILITIES
 
+;; HIGHLIGHT :: Allow regions to be (temporarily) highlighted
+(use-package highlight
+  :ensure t)
+
 ;; BRACKETS :: better tracking of parentheses
 (use-package smartparens
   :ensure t
@@ -169,7 +173,7 @@
 (use-package rainbow-delimiters
   :ensure t
   :diminish rainbow-delimiters-mode
-  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 
 ;;; EDITOR BEHAVIOUR
@@ -207,7 +211,7 @@
     (magit-define-popup-action 'magit-push-popup
       ?a
       "push current branch to all remotes"
-      'magit-custom-push-current-all-remotes ; Defined below
+      'magit-custom-push-current-all-remotes ; Defined above
       ?e))
 
 ;; PROJECTILE :: Projectile helps with project management
@@ -230,6 +234,18 @@
   :commands helm-swoop
   :after helm)
 
+;; HELM-GTAGS
+(use-package helm-gtags
+  :ensure t
+  :pin melpa-stable
+  :diminish helm-gtags-mode
+  :hook ((c-mode . helm-gtags-mode)
+         (c++-mode . helm-gtags-mode))
+  :bind
+    (:map helm-gtags-mode-map
+          ("M-." . helm-gtags-dwim)
+          ("M-," . helm-gtags-pop-stack)))
+
 ;; FLYCHECK :: On the fly syntax checking
 (use-package flycheck
   :ensure t
@@ -246,8 +262,8 @@
          (racer-mode . company-mode))
   :config
     (setq company-idle-delay 0.5
-            company-minimum-prefix-length 1
-            company-tooltip-align-annotations t))
+          company-minimum-prefix-length 1
+          company-tooltip-align-annotations t))
 
 
 ;; COMPANY-QUICKHELP :: Provides documentation for company completions
@@ -412,6 +428,7 @@
       "pg" 'helm-projectile-grep
       "s"  'helm-swoop
       "S"  'helm-swoop-back-to-last-point
+      "j"  'helm-imenu
       ","  'avy-goto-char
       "k" 'helm-show-kill-ring
       "g" 'magit-status))
