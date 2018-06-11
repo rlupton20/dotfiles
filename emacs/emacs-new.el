@@ -424,10 +424,12 @@
       "pf" 'helm-projectile-find-file
       "ps" 'helm-projectile-switch-project
       "pb" 'helm-projectile-switch-to-buffer ; For uniformity
-      "b"  'helm-projectile-switch-to-buffer
+      "b"  'helm-buffers-list
       "pg" 'helm-projectile-grep
       "s"  'helm-swoop
       "S"  'helm-swoop-back-to-last-point
+      "t"  'helm-gtags-select
+      "T"  'helm-gtags-show-stack
       "j"  'helm-imenu
       ","  'avy-goto-char
       "k" 'helm-show-kill-ring
