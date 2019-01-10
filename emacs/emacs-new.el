@@ -41,6 +41,7 @@
     (scroll-bar-mode -1)  ; Remove the scrollbar
     (setq-default tab-width 4 indent-tabs-mode nil)  ; Use spaces not tabs
     (global-visual-line-mode 1)  ; Use visual line mode to wrap lines nicely
+    (global-hl-line-mode)
     (setq-default show-trailing-whitespace t)
     ;; Special emacs features
     (put 'narrow-to-region 'disabled nil)
@@ -397,7 +398,6 @@
     (global-evil-leader-mode)
     (evil-leader/set-leader ",")
     (evil-leader/set-key
-      "V" 'global-hl-line-mode
       "x" 'helm-M-x
       "f" 'helm-find-files
       "pf" 'helm-projectile-find-file
