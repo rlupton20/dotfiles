@@ -31,6 +31,14 @@
 (use-package diminish
   :ensure t)
 
+;; GENERAL :: Allow more sophisticated keybindings
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup)
+  (general-create-definer evil-leader-def
+    :prefix ","))
+
 (use-package emacs
   :diminish visual-line-mode
   :config
@@ -390,29 +398,26 @@
   :diminish evil-smartparens-mode
   :hook (smartparens-enabled . evil-smartparens-mode))
 
-;; EVIL LEADER :: leader key for commands
-(use-package evil-leader
-  :ensure t
-  :diminish evil-leader-mode
-  :config
-    (global-evil-leader-mode)
-    (evil-leader/set-leader ",")
-    (evil-leader/set-key
-      "x" 'helm-M-x
-      "f" 'helm-find-files
-      "pf" 'helm-projectile-find-file
-      "ps" 'helm-projectile-switch-project
-      "pb" 'helm-projectile-switch-to-buffer ; For uniformity
-      "b"  'helm-buffers-list
-      "pg" 'helm-projectile-grep
-      "s"  'helm-swoop
-      "S"  'helm-swoop-back-to-last-point
-      "t"  'helm-gtags-select
-      "T"  'helm-gtags-show-stack
-      "j"  'helm-imenu
-      ","  'avy-goto-char
-      "k" 'helm-show-kill-ring
-      "g" 'magit-status))
+;; EVIL LEADER :: leader key for commands, implemented with general
+(evil-leader-def
+  :states '(normal motion)
+  :keymaps 'override
+  "x" 'helm-M-x
+  "f" 'helm-find-files
+  "p" '(:ignore t :which-key "project")
+  "pf" 'helm-projectile-find-file
+  "ps" 'helm-projectile-switch-project
+  "pb" 'helm-projectile-switch-to-buffer ; For uniformity
+  "b"  'helm-buffers-list
+  "pg" 'helm-projectile-grep
+  "s"  'helm-swoop
+  "S"  'helm-swoop-back-to-last-point
+  "t"  'helm-gtags-select
+  "T"  'helm-gtags-show-stack
+  "j"  'helm-imenu
+  ","  'avy-goto-char
+  "k" 'helm-show-kill-ring
+  "g" 'magit-status)
 
 ;; EVIL :: Enable evil mode
 (use-package evil
