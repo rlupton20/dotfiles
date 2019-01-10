@@ -117,12 +117,8 @@
   :hook (racer-mode . eldoc-mode))
 
 ;; THEMES :: Make emacs look nice
-(use-package leuven-theme
-  :ensure t
-  :if window-system
-  :init
-  (setq leuven-scale-outline-headlines nil)
-  (setq leuven-scale-org-agenda-structure nil))
+(use-package color-theme-sanityinc-solarized
+  :ensure t)
 
 ;; Configure the modeline
 (use-package emacs
@@ -157,6 +153,14 @@
   (setq nlinum-relative-current-symbol "0")
   (global-nlinum-relative-mode))
 
+
+;;; HELPERS
+
+'';; WHICH-KEY :: pops up a buffer which helps with keybindings
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
 
 ;;; TEXT EDITING UTILITIES
 
@@ -330,32 +334,6 @@
    :ensure t
    :after flycheck
    :hook (flycheck-mode . flycheck-rust-setup))
-
-
-;;; PYTHON
-(use-package pipenv
-  :ensure t
-  :diminish pipenv-mode
-  :hook (python-mode . pipenv-mode)
-  :config
-    ;; Set the root virtualenv directory to the one managed by pipenv
-    (let* ((venv-path (shell-command-to-string "pipenv --venv"))
-           (venv-folder (file-name-directory venv-path)))
-      (setenv "WORKON_HOME" venv-folder)))
-
-(use-package elpy
-  :ensure t
-  :diminish elpy-mode highlight-indentation-mode
-  :hook (python-mode . elpy-mode)
-  :config
-    (defun elpy/auto-activate-pipenv-virtualenv ()
-        "Activate the virtualenv provided by pipenv"
-        (interactive)
-        (let ((venv-path (s-trim (shell-command-to-string "pipenv --venv"))))
-          (pyvenv-activate venv-path)))
-
-    (add-hook 'elpy-mode-hook #'elpy/auto-activate-pipenv-virtualenv))
-
 
 
 ;;; KITCHEN SINKS :: Modes that somehow find there way into emacs

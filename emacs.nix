@@ -4,7 +4,9 @@ let
 
   custom-emacs-platform = emacsPackagesNgGen emacs;
 
-  base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: []);
+  base-emacs = custom-emacs-platform.emacsWithPackages (epkgs: [
+    epkgs.erlang
+  ]);
 
   dotfile = builtins.readFile ./emacs/emacs-new.el;
 
