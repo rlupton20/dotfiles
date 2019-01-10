@@ -127,7 +127,9 @@
 
 ;; THEMES :: Make emacs look nice
 (use-package color-theme-sanityinc-solarized
-  :ensure t)
+  :ensure t
+  :config
+  (color-theme-sanityinc-solarized-dark))
 
 ;; Configure the modeline
 (use-package emacs
