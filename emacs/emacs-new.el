@@ -156,9 +156,10 @@
 
 ;;; HELPERS
 
-'';; WHICH-KEY :: pops up a buffer which helps with keybindings
+;; WHICH-KEY :: pops up a buffer which helps with keybindings
 (use-package which-key
   :ensure t
+  :diminish which-key-mode
   :config
   (which-key-mode))
 
