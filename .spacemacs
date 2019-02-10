@@ -331,5 +331,14 @@ you should place your code here."
                   mode-line-modes
                   " "
                   mode-line/position))
+
+  (setq evil-normal-state-tag " NORMAL "
+        evil-emacs-state-tag " EMACS "
+        evil-insert-state-tag " INSERT "
+        evil-motion-state-tag " MOTION "
+        evil-visual-state-tag " VISUAL "
+        evil-operator-state-tag " OPERATOR ")
+  (setq evil-mode-line-format '(before . mode-line/start-of-line))
+
   )
 
