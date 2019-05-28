@@ -1,0 +1,81 @@
+diff --git a/config.def.h b/config.def.h
+index 1c0b587..ac82782 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -5,17 +5,25 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
+ static const unsigned int snap      = 32;       /* snap pixel */
+ static const int showbar            = 1;        /* 0 means no bar */
+ static const int topbar             = 1;        /* 0 means bottom bar */
+-static const char *fonts[]          = { "monospace:size=10" };
+-static const char dmenufont[]       = "monospace:size=10";
++static const char *fonts[] = {
++                              "Hack:size=10"
++};
++static const char dmenufont[]       = "Hack:size=10";
+ static const char col_gray1[]       = "#222222";
+ static const char col_gray2[]       = "#444444";
+ static const char col_gray3[]       = "#bbbbbb";
+ static const char col_gray4[]       = "#eeeeee";
+ static const char col_cyan[]        = "#005577";
++/* Solarized colours */
++static const char col_sol_base03[]  = "#002b36";
++static const char col_sol_base02[]  = "#073642";
++static const char col_sol_base01[]  = "#586e75";
++static const char col_sol_yellow[]  = "#b58900";
++
+ static const char *colors[][3]      = {
+ 	/*               fg         bg         border   */
+-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
++	[SchemeNorm] = { col_gray3, col_sol_base02, col_gray2 },
++	[SchemeSel]  = { col_sol_base03, col_sol_yellow, col_cyan  },
+ };
+ 
+ /* tagging */
+@@ -34,17 +42,17 @@ static const Rule rules[] = {
+ /* layout(s) */
+ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+ static const int nmaster     = 1;    /* number of clients in master area */
+-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
++static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+ 
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+-	{ "[]=",      tile },    /* first entry is default */
+-	{ "><>",      NULL },    /* no layout function means floating behavior */
++	{ "[T]",      tile },    /* first entry is default */
++	{ "[F]",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+ };
+ 
+ /* key definitions */
+-#define MODKEY Mod1Mask
++#define MODKEY Mod4Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+@@ -56,8 +64,9 @@ static const Layout layouts[] = {
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+-static const char *termcmd[]  = { "st", NULL };
++
++static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_sol_base02, "-nf", col_gray3, "-sb", col_sol_yellow, "-sf", col_sol_base03, "-l", "10", NULL };
++static const char *termcmd[]  = { "urxvt", "-tr", "-sh", "25", NULL };
+ 
+ static Key keys[] = {
+ 	/* modifier                     key        function        argument */
+diff --git a/dwm.c b/dwm.c
+index 4465af1..e4f8390 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -730,7 +730,7 @@ drawbar(Monitor *m)
+ 
+ 	if ((w = m->ww - sw - x) > bh) {
+ 		if (m->sel) {
+-			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
++			/* drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]); */
+ 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+ 			if (m->sel->isfloating)
+ 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
